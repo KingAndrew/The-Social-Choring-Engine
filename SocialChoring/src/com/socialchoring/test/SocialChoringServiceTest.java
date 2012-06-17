@@ -16,7 +16,7 @@ import com.socialchoring.service.SocialChoringServiceImpl;
 public class SocialChoringServiceTest {
 
 	@Test
-	public void testCalculateWinners() {
+	public void testCalculateWinners4ScenarioA() {
 		SocialChoringService service = new SocialChoringServiceImpl();
 		long[] accountid = new long[3];
 		List<Player> players = new ArrayList<Player>();
