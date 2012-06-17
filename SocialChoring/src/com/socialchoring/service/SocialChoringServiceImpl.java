@@ -10,6 +10,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.socialchoring.bean.Player;
+import com.socialchoring.bean.Player_chore_plan;
 
 public class SocialChoringServiceImpl implements SocialChoringService {
 	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
@@ -180,7 +181,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 	}
 
 	@Override
-	public boolean startChore(long chore_plan_id, long time_started,
+	public boolean startChore(long chore_plan_id, Date time_started,
 			Date date_observed) {
 		// TODO Auto-generated method stub
 		return false;
@@ -226,6 +227,12 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 
 		return dbConnection;
 
+	}
+
+	@Override
+	public List<Player_chore_plan> getChorePlanByPlayerId(long playerId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
