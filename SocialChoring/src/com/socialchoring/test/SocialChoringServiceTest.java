@@ -409,6 +409,7 @@ public class SocialChoringServiceTest {
 		deleteAll(service, accountid);
 	}
 
+	@Test
 	public void testCalculateWinners4ScenarioC() {
 		SocialChoringService service = new SocialChoringServiceImpl();
 		long[] accountid = new long[3];
@@ -625,7 +626,8 @@ public class SocialChoringServiceTest {
 		deleteAll(service, accountid);
 
 	}
-
+	
+	@Test
 	public void testCalculateWinners4ScenarioD() {
 		SocialChoringService service = new SocialChoringServiceImpl();
 		long[] accountid = new long[3];
@@ -928,6 +930,7 @@ public class SocialChoringServiceTest {
 
 	}
 
+	@Test
 	public void testCalculateWinners4ScenarioE() {
 		SocialChoringService service = new SocialChoringServiceImpl();
 		long[] accountid = new long[3];
