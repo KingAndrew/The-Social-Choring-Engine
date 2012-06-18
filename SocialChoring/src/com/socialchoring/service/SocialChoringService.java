@@ -4,7 +4,7 @@ import java.util.Date;
 import java.util.List;
 
 import com.socialchoring.bean.Player;
-import com.socialchoring.bean.Player_chore_plan;
+import com.socialchoring.bean.PlayerChorePlan;
 
 public interface SocialChoringService {
 	/**
@@ -33,9 +33,7 @@ public interface SocialChoringService {
 	 *         returned the call was not successful;
 	 * @throws Throwable
 	 */
-	public long createAccount(String parent_first_name,
-			String parent_last_name, String parent_email,
-			String player_first_name);
+	public long createAccount(String parent_first_name, String parent_last_name, String parent_email, String player_first_name);
 
 	/**
 	 * Not Implemented I don't remember the reason for this. It could be a
@@ -62,8 +60,7 @@ public interface SocialChoringService {
 	 *            Max length of 40
 	 * @return true for success false for failure.
 	 */
-	public boolean addNewPlayerToAccount(long account_id,
-			String player_first_name);
+	public boolean addNewPlayerToAccount(long account_id, String player_first_name);
 
 	/**
 	 * Returns all the players for the given account_id
@@ -82,8 +79,7 @@ public interface SocialChoringService {
 	 *            be copied from Default chore plan
 	 * @return
 	 */
-	public boolean createChorePlanForPlayer(long player_id,
-			long chore_plan_to_copy_id);
+	public long createChorePlanForPlayer(long player_id, long chore_plan_to_copy_id);
 
 	/**
 	 * Creates a connection between two players
@@ -93,8 +89,7 @@ public interface SocialChoringService {
 	 * @param player_two_id
 	 * @return
 	 */
-	public boolean createFriends(Date date, long player_one_id,
-			long player_two_id);
+	public boolean createFriends(Date date, long player_one_id, long player_two_id);
 
 	// Not Implemented
 	/**
@@ -113,8 +108,7 @@ public interface SocialChoringService {
 	 * @param date_observed
 	 * @return
 	 */
-	public boolean startChore(long chore_plan_id, Date time_started,
-			Date date_observed);
+	public long startChore(long chore_plan_id, long time_started, Date date_observed);
 
 	/**
 	 * Records the stop time for the given chore
@@ -125,8 +119,7 @@ public interface SocialChoringService {
 	 * @param did_complete
 	 * @return
 	 */
-	public boolean stopChore(long chore_observed_id, long time_stoped,
-			boolean did_complete);
+	public boolean stopChore(long chore_observed_id, long time_stoped, boolean did_complete);
 
 	/**
 	 * Get player's all chore plans by player id
@@ -134,12 +127,21 @@ public interface SocialChoringService {
 	 * @param playerid
 	 * @return
 	 */
-	public List<Player_chore_plan> getChorePlanByPlayerId(long playerId);
+	public List<PlayerChorePlan> getChorePlanByPlayerId(long playerId);
 
 	/**
 	 * This should be call by a cron job. This is the big daddy that gets run
 	 * once a day and calculates all the winners.
 	 */
 	public boolean calculateWinners(Date date_observed);
+	
+
+	/**
+	 * Delete Account with all its players and related chore informations(friendship, chore plan, chore observed and etc.)
+	 * 
+	 * @param playerid
+	 * @return
+	 */
+	public boolean deleteAccount(long acountId);
 
 }

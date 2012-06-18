@@ -9,7 +9,6 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.socialchoring.bean.Player;
-import com.socialchoring.bean.Player_chore_plan;
 import com.socialchoring.service.SocialChoringService;
 import com.socialchoring.service.SocialChoringServiceImpl;
 
@@ -19,23 +18,21 @@ public class SocialChoringServiceTest {
 	public void testCalculateWinners4ScenarioA() {
 		SocialChoringService service = new SocialChoringServiceImpl();
 		long[] accountid = new long[3];
+		long[][] chorePlanId = new long[5][7];
+		long[][] choreObservedId = new long[5][7];
 		List<Player> players = new ArrayList<Player>();
 
 		// 1. Create several accounts by calling createAccount (say 3 accounts
 		// which means 3 parents, right?)
 		for (int i = 1; i < 4; i++) {
-			accountid[i - 1] = service.createAccount("parent_first_name " + i,
-					"parent_last_name " + i, "parent_email@xxx.us" + i,
-					"player_first_name" + i);
+			accountid[i - 1] = service.createAccount("parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
 			Assert.assertTrue(accountid[i - 1] > 0);
 		}
 		// 2. add 2 more players to account by calling addNewPlayerToAccount
 		// (then we have 5 players in total)
-		boolean returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name4");
+		boolean returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name4");
 		Assert.assertTrue(returnValue);
-		returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name5");
+		returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name5");
 		Assert.assertTrue(returnValue);
 
 		// 3. make the 5 players to be friends by calling createFriends
@@ -43,123 +40,194 @@ public class SocialChoringServiceTest {
 			players.addAll(service.getPlayersForAccount(accountid[i]));
 		}
 
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(1).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(1).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(2).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(2).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(3).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(3).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(1).getId(),
-				players.get(2).getId());
+		returnValue = service.createFriends(new Date(), players.get(1).getId(), players.get(2).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(1).getId(),
-				players.get(3).getId());
+		returnValue = service.createFriends(new Date(), players.get(1).getId(), players.get(3).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(1).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(1).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(2).getId(),
-				players.get(3).getId());
+		returnValue = service.createFriends(new Date(), players.get(2).getId(), players.get(3).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(2).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(2).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(3).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(3).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
 
 		// -- I saw we already have several chores in master_chore table, so I
 		// will just use them and not create new chores.
 		// 4. add 7 chore plans for the each player by calling
 		// createChorePlanForPlayer (could be same chores?)
+		int i = 0;
 		for (Player player : players) {
-			returnValue = service.createChorePlanForPlayer(player.getId(), 1);
-			Assert.assertTrue(returnValue);
-			returnValue = service.createChorePlanForPlayer(player.getId(), 2);
-			Assert.assertTrue(returnValue);
-			returnValue = service.createChorePlanForPlayer(player.getId(), 3);
-			Assert.assertTrue(returnValue);
-			returnValue = service.createChorePlanForPlayer(player.getId(), 4);
-			Assert.assertTrue(returnValue);
-			returnValue = service.createChorePlanForPlayer(player.getId(), 5);
-			Assert.assertTrue(returnValue);
-			returnValue = service.createChorePlanForPlayer(player.getId(), 6);
-			Assert.assertTrue(returnValue);
-			returnValue = service.createChorePlanForPlayer(player.getId(), 7);
-			Assert.assertTrue(returnValue);
+			chorePlanId[i][0] = service.createChorePlanForPlayer(player.getId(), 1);
+			Assert.assertTrue(chorePlanId[i][0] > 0);
+			chorePlanId[i][1] = service.createChorePlanForPlayer(player.getId(), 2);
+			Assert.assertTrue(chorePlanId[i][1] > 0);
+			chorePlanId[i][2] = service.createChorePlanForPlayer(player.getId(), 3);
+			Assert.assertTrue(chorePlanId[i][2] > 0);
+			chorePlanId[i][3] = service.createChorePlanForPlayer(player.getId(), 4);
+			Assert.assertTrue(chorePlanId[i][3] > 0);
+			chorePlanId[i][4] = service.createChorePlanForPlayer(player.getId(), 5);
+			Assert.assertTrue(chorePlanId[i][4] > 0);
+			chorePlanId[i][5] = service.createChorePlanForPlayer(player.getId(), 6);
+			Assert.assertTrue(chorePlanId[i][5] > 0);
+			chorePlanId[i][6] = service.createChorePlanForPlayer(player.getId(), 7);
+			Assert.assertTrue(chorePlanId[i][6] > 0);
+			i++;
 		}
 
 		// 5. players start to play their chores by calling startChore
+		i = 0;
 		for (Player player : players) {
-			List<Player_chore_plan> chorePlans = service
-					.getChorePlanByPlayerId(player.getId());
-			for (Player_chore_plan plan : chorePlans) {
-				returnValue = service
-						.startChore(plan.getId(), new Date(), null);
-				Assert.assertTrue(returnValue);
+			for (int j = 0; j < 7; j++) {
+				if (player.getFirst_name().contains("1") || player.getFirst_name().contains("5")) {
+					if (j == 4) {
+						// see matrix below
+						continue;
+					}
+				}
+				choreObservedId[i][j] = service.startChore(chorePlanId[i][j], 1, null);
+				Assert.assertTrue(choreObservedId[i][j] > 0);
 			}
+			i++;
 		}
 
 		// 6. players stop their chores by calling stopChore, by passing in
 		// approperiate parameters to achieve the folllowing score UCanCash
 		// matrix.
-		//
+
 		// Player1 = 1, 2, 3, 1, 0, 2, 3
+		returnValue = service.stopChore(choreObservedId[0][0], 1, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[0][1], 8, true);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[0][2], 2, true);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[0][3], 6, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[0][5], 20, true);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[0][6], 8, true);
+		Assert.assertTrue(returnValue);
+
 		// Player2 = 2, 3, 1, 3, 2, 1, 2
+		returnValue = service.stopChore(choreObservedId[1][0], 5, true);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][1], 4, true);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][2], 100, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][3], 8, true);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][4], 5, true);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][5], 20, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][6], 12, true);
+		Assert.assertTrue(returnValue);
+
 		// player3 = 2, 1, 3, 2, 1, 1, 1
+		returnValue = service.stopChore(choreObservedId[1][0], 5, true);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][1], 4, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][2], 2, true);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][3], 8, true);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][4], 5, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][5], 20, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][6], 12, false);
+		Assert.assertTrue(returnValue);
+
 		// player4 = 1, 1, 1, 1, 1, 1, 1
+		returnValue = service.stopChore(choreObservedId[1][0], 5, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][1], 4, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][2], 2, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][3], 8, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][4], 5, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][5], 20, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][6], 12, false);
+		Assert.assertTrue(returnValue);
+
 		// player5 = 1, 3, 2, 1, 0, 2, 1
-		for (Player player : players) {
-			// List<Player_chore_observed> choreObserves = service
-			// .getChoreObservedByChorePlanId(player.getId());
-			// for (Player_chore_plan plan : chorePlans) {
-			// returnValue = service.stopChore(chore_observed_id, time_stoped,
-			// did_complete);
-			// Assert.assertTrue(returnValue);
-			// }
-		}
+		returnValue = service.stopChore(choreObservedId[1][0], 5, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][1], 4, true);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][2], 10, true);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][3], 8, false);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][5], 14, true);
+		Assert.assertTrue(returnValue);
+		returnValue = service.stopChore(choreObservedId[1][6], 12, false);
+		Assert.assertTrue(returnValue);
 
 		// 7. call calculateWinners to calculate the winners
-		//
+		returnValue = service.calculateWinners(new Date());
+		Assert.assertTrue(returnValue);
+
 		// 8. retrieve each of the players by calling getPlayersForAccount to
 		// check if the earnings match the below table
-		//
-		// Player2 = 82.5
-		// Player3 = 52.8
+		players.clear();
+		for (i = 1; i < 4; i++) {
+			players.addAll(service.getPlayersForAccount(accountid[i]));
+		}
 		// Player1 = 36.3
-		// Player5 = 22
-		// Player4 = 7.7
+		Assert.assertEquals(players.get(0).getEarnings(), "36.3");
+		Assert.assertEquals(players.get(1).getChampion_count(), 0);
+		// Player2 = 82.5 -- winner
+		Assert.assertEquals(players.get(1).getEarnings(), "82.5");
+		Assert.assertEquals(players.get(1).getChampion_count(), 1);
+		// Player3 = 52.8
+		Assert.assertEquals(players.get(0).getEarnings(), "52.8");
+		Assert.assertEquals(players.get(1).getChampion_count(), 0);
+		// Player3 = 52.8
+		Assert.assertEquals(players.get(0).getEarnings(), "7.7");
+		Assert.assertEquals(players.get(1).getChampion_count(), 0);
+		// Player3 = 52.8
+		Assert.assertEquals(players.get(0).getEarnings(), "22");
+		Assert.assertEquals(players.get(1).getChampion_count(), 0);
 
 		// 9. delete all the test data
-		deleteAll();
+		deleteAll(service, accountid);
 	}
 
 	@Test
 	public void testCalculateWinners4ScenarioB() {
 		SocialChoringService service = new SocialChoringServiceImpl();
 		long[] accountid = new long[3];
+		long[][] chorePlanId = new long[5][7];
+		long[][] choreObservedId = new long[5][7];
 		List<Player> players = new ArrayList<Player>();
 
 		// 1. Create 3 accounts by calling createAccount
 		for (int i = 1; i < 4; i++) {
-			accountid[i - 1] = service.createAccount("parent_first_name " + i,
-					"parent_last_name " + i, "parent_email@xxx.us" + i,
-					"player_first_name" + i);
+			accountid[i - 1] = service.createAccount("parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
 			Assert.assertTrue(accountid[i - 1] > 0);
 		}
 		// 2. add 2 more players to account by calling addNewPlayerToAccount
 		// (then we have 5 players in total)
-		boolean returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name4");
+		boolean returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name4");
 		Assert.assertTrue(returnValue);
-		returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name5");
+		returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name5");
 		Assert.assertTrue(returnValue);
 
 		// 3. make the 5 players to be friends by calling createFriends
@@ -167,35 +235,25 @@ public class SocialChoringServiceTest {
 			players.addAll(service.getPlayersForAccount(accountid[i]));
 		}
 
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(1).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(1).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(2).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(2).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(3).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(3).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(1).getId(),
-				players.get(2).getId());
+		returnValue = service.createFriends(new Date(), players.get(1).getId(), players.get(2).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(1).getId(),
-				players.get(3).getId());
+		returnValue = service.createFriends(new Date(), players.get(1).getId(), players.get(3).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(1).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(1).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(2).getId(),
-				players.get(3).getId());
+		returnValue = service.createFriends(new Date(), players.get(2).getId(), players.get(3).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(2).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(2).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(3).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(3).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
 
 		// 4. add different chores to each player as the following matrix
@@ -206,87 +264,62 @@ public class SocialChoringServiceTest {
 		// player5 = 3, 3, 3, 3, 3
 		for (Player player : players) {
 			if (player.getFirst_name().contains("1")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
+				chorePlanId[0][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[0][0] > 0);
+				chorePlanId[0][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[0][1] > 0);
+				chorePlanId[0][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[0][2] > 0);
 			} else if (player.getFirst_name().contains("2")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
+				chorePlanId[1][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[1][0] > 0);
+				chorePlanId[1][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[1][1] > 0);
+				chorePlanId[1][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[1][2] > 0);
+				chorePlanId[1][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[1][3] > 0);
 			} else if (player.getFirst_name().contains("3")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
+				chorePlanId[2][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[2][0] > 0);
+				chorePlanId[2][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[2][1] > 0);
 			} else if (player.getFirst_name().contains("4")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
-
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						5);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						6);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						7);
-				Assert.assertTrue(returnValue);
+				chorePlanId[3][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[3][0] > 0);
+				chorePlanId[3][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[3][1] > 0);
+				chorePlanId[3][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[3][2] > 0);
+				chorePlanId[3][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[3][3] > 0);
+				chorePlanId[3][4] = service.createChorePlanForPlayer(player.getId(), 5);
+				Assert.assertTrue(chorePlanId[3][4] > 0);
+				chorePlanId[3][5] = service.createChorePlanForPlayer(player.getId(), 6);
+				Assert.assertTrue(chorePlanId[3][5] > 0);
+				chorePlanId[3][6] = service.createChorePlanForPlayer(player.getId(), 7);
+				Assert.assertTrue(chorePlanId[3][6] > 0);
 			} else if (player.getFirst_name().contains("5")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
-
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						5);
-				Assert.assertTrue(returnValue);
+				chorePlanId[4][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[4][0] > 0);
+				chorePlanId[4][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[4][1] > 0);
+				chorePlanId[4][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[4][2] > 0);
+				chorePlanId[4][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[4][3] > 0);
+				chorePlanId[4][4] = service.createChorePlanForPlayer(player.getId(), 5);
+				Assert.assertTrue(chorePlanId[4][4] > 0);
 			}
 		}
 
 		// 5. players start to play their chores by calling startChore
-		for (Player player : players) {
-			List<Player_chore_plan> chorePlans = service
-					.getChorePlanByPlayerId(player.getId());
-			for (Player_chore_plan plan : chorePlans) {
-				returnValue = service
-						.startChore(plan.getId(), new Date(), null);
-				Assert.assertTrue(returnValue);
+		for (int i = 0; i < 5; i++) {
+			for (int j = 0; j < 7; j++) {
+				choreObservedId[i][j] = service.startChore(chorePlanId[i][j], 1, null);
+				Assert.assertTrue(choreObservedId[i][j] > 0);
 			}
+			i++;
 		}
 
 		// 6. players stop their chores by calling stopChore, by passing in
@@ -313,28 +346,26 @@ public class SocialChoringServiceTest {
 		// player5 = 66
 
 		// 9. delete all the test data
-		deleteAll();
+		deleteAll(service, accountid);
 	}
 
 	public void testCalculateWinners4ScenarioC() {
 		SocialChoringService service = new SocialChoringServiceImpl();
 		long[] accountid = new long[3];
+		long[][] chorePlanId = new long[5][7];
+		long[][] choreObservedId = new long[5][7];
 		List<Player> players = new ArrayList<Player>();
 
 		// 1. Create 3 accounts by calling createAccount
 		for (int i = 1; i < 4; i++) {
-			accountid[i - 1] = service.createAccount("parent_first_name " + i,
-					"parent_last_name " + i, "parent_email@xxx.us" + i,
-					"player_first_name" + i);
+			accountid[i - 1] = service.createAccount("parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
 			Assert.assertTrue(accountid[i - 1] > 0);
 		}
 		// 2. add 2 more players to account by calling addNewPlayerToAccount
 		// (then we have 5 players in total)
-		boolean returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name4");
+		boolean returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name4");
 		Assert.assertTrue(returnValue);
-		returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name5");
+		returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name5");
 		Assert.assertTrue(returnValue);
 
 		// 3. make the 5 players to be friends by calling createFriends
@@ -342,35 +373,25 @@ public class SocialChoringServiceTest {
 			players.addAll(service.getPlayersForAccount(accountid[i]));
 		}
 
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(1).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(1).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(2).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(2).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(3).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(3).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(1).getId(),
-				players.get(2).getId());
+		returnValue = service.createFriends(new Date(), players.get(1).getId(), players.get(2).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(1).getId(),
-				players.get(3).getId());
+		returnValue = service.createFriends(new Date(), players.get(1).getId(), players.get(3).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(1).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(1).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(2).getId(),
-				players.get(3).getId());
+		returnValue = service.createFriends(new Date(), players.get(2).getId(), players.get(3).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(2).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(2).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(3).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(3).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
 
 		// 4. add different chores to each player as the following matrix
@@ -381,87 +402,63 @@ public class SocialChoringServiceTest {
 		// player5 = 2, 3, 1, 2, 2
 		for (Player player : players) {
 			if (player.getFirst_name().contains("1")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
+				chorePlanId[0][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[0][0] > 0);
+				chorePlanId[0][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[0][1] > 0);
+				chorePlanId[0][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[0][2] > 0);
 			} else if (player.getFirst_name().contains("2")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
+				chorePlanId[1][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[1][0] > 0);
+				chorePlanId[1][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[1][1] > 0);
+				chorePlanId[1][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[1][2] > 0);
+				chorePlanId[1][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[1][3] > 0);
 			} else if (player.getFirst_name().contains("3")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
+				chorePlanId[2][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[2][0] > 0);
+				chorePlanId[2][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[2][1] > 0);
 			} else if (player.getFirst_name().contains("4")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
-
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						5);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						6);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						7);
-				Assert.assertTrue(returnValue);
+				chorePlanId[3][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[3][0] > 0);
+				chorePlanId[3][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[3][1] > 0);
+				chorePlanId[3][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[3][2] > 0);
+				chorePlanId[3][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[3][3] > 0);
+				chorePlanId[3][4] = service.createChorePlanForPlayer(player.getId(), 5);
+				Assert.assertTrue(chorePlanId[3][4] > 0);
+				chorePlanId[3][5] = service.createChorePlanForPlayer(player.getId(), 6);
+				Assert.assertTrue(chorePlanId[3][5] > 0);
+				chorePlanId[3][6] = service.createChorePlanForPlayer(player.getId(), 7);
+				Assert.assertTrue(chorePlanId[3][6] > 0);
 			} else if (player.getFirst_name().contains("5")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
-
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						5);
-				Assert.assertTrue(returnValue);
+				chorePlanId[4][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[4][0] > 0);
+				chorePlanId[4][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[4][1] > 0);
+				chorePlanId[4][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[4][2] > 0);
+				chorePlanId[4][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[4][3] > 0);
+				chorePlanId[4][4] = service.createChorePlanForPlayer(player.getId(), 5);
+				Assert.assertTrue(chorePlanId[4][4] > 0);
 			}
 		}
 
 		// 5. players start to play their chores by calling startChore
+		int i = 0;
 		for (Player player : players) {
-			List<Player_chore_plan> chorePlans = service
-					.getChorePlanByPlayerId(player.getId());
-			for (Player_chore_plan plan : chorePlans) {
-				returnValue = service
-						.startChore(plan.getId(), new Date(), null);
-				Assert.assertTrue(returnValue);
+			for (int j = 0; j < 7; j++) {
+				choreObservedId[i][j] = service.startChore(chorePlanId[i][j], 1, null);
+				Assert.assertTrue(choreObservedId[i][j] > 0);
 			}
+			i++;
 		}
 
 		// 6. players stop their chores by calling stopChore, by passing in
@@ -488,56 +485,52 @@ public class SocialChoringServiceTest {
 		// Player1 + 4.4
 
 		// 9. delete all the test data
-		deleteAll();
+		deleteAll(service, accountid);
 
 	}
 
 	public void testCalculateWinners4ScenarioD() {
 		SocialChoringService service = new SocialChoringServiceImpl();
 		long[] accountid = new long[3];
+		long[][] chorePlanId = new long[7][7];
+		long[][] choreObservedId = new long[7][7];
 		List<Player> players = new ArrayList<Player>();
 
 		// 1. Create 3 accounts by calling createAccount
 		for (int i = 1; i < 4; i++) {
-			accountid[i - 1] = service.createAccount("parent_first_name " + i,
-					"parent_last_name " + i, "parent_email@xxx.us" + i,
-					"player_first_name" + i);
+			accountid[i - 1] = service.createAccount("parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
 			Assert.assertTrue(accountid[i - 1] > 0);
 		}
-		// 2. add 2 more players to account by calling addNewPlayerToAccount
+		// 2. add 4 more players to account by calling addNewPlayerToAccount
 		// (then we have 7 players in total)
-		boolean returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name4");
+		boolean returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name4");
 		Assert.assertTrue(returnValue);
-		returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name5");
+		returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name5");
 		Assert.assertTrue(returnValue);
-		returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name6");
+		returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name6");
 		Assert.assertTrue(returnValue);
-		returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name7");
+		returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name7");
 		Assert.assertTrue(returnValue);
 
 		// 3. some of them are friends, friends matrix as below
 		// Player1 Castle
 		// Player1 = 1, 0, 4, = 5
-		// Player2 = 3, 2, 2, 3 = 10 ¡û winner
+		// Player2 = 3, 2, 2, 3 = 10 ï¿½ï¿½ winner
 		//
 		// Player2 Castle
 		// Player1 = 1, 0, 4, = 5
 		// Player2 = 3, 2, 2, 3 = 10
-		// Player3 = 3, 3, 3, 3 = 12 ¡û winner
+		// Player3 = 3, 3, 3, 3 = 12 ï¿½ï¿½ winner
 		//
 		// Player3 Castle
 		// Player3 = 3, 3, 3, 3 = 12
 		// Player2 = 3, 2, 2, 3 = 10
-		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ¡û winner
+		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ï¿½ï¿½ winner
 		// Player5 = 2, 3, 1, 2, 2, = 10
 		//
 		//
 		// Player4 Castle
-		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ¡û winner & King
+		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ï¿½ï¿½ winner & King
 		// Player3 = 3, 3, 3, 3 = 12
 		// Player5 = 2, 3, 1, 2, 2, = 10
 		// Player6 = 3, 3, 0, 3 = 09
@@ -546,155 +539,112 @@ public class SocialChoringServiceTest {
 		//
 		// Player5 Castle
 		// Player3 = 3, 3, 3, 3 = 12
-		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ¡û winner
+		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ï¿½ï¿½ winner
 		// Player5 = 2, 3, 1, 2, 2, = 10
 
 		for (int i = 1; i < 4; i++) {
 			players.addAll(service.getPlayersForAccount(accountid[i]));
 		}
 
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(1).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(1).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(1).getId(),
-				players.get(2).getId());
+		returnValue = service.createFriends(new Date(), players.get(1).getId(), players.get(2).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(2).getId(),
-				players.get(3).getId());
+		returnValue = service.createFriends(new Date(), players.get(2).getId(), players.get(3).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(2).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(2).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(3).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(3).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(3).getId(),
-				players.get(5).getId());
+		returnValue = service.createFriends(new Date(), players.get(3).getId(), players.get(5).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(3).getId(),
-				players.get(7).getId());
+		returnValue = service.createFriends(new Date(), players.get(3).getId(), players.get(7).getId());
 		Assert.assertTrue(returnValue);
 
 		// 4. add different chores to each player as the above matrix
 		for (Player player : players) {
 			if (player.getFirst_name().contains("1")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
+				chorePlanId[0][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[0][0] > 0);
+				chorePlanId[0][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[0][1] > 0);
+				chorePlanId[0][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[0][2] > 0);
 			} else if (player.getFirst_name().contains("2")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
+				chorePlanId[1][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[1][0] > 0);
+				chorePlanId[1][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[1][1] > 0);
+				chorePlanId[1][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[1][2] > 0);
+				chorePlanId[1][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[1][3] > 0);
 			} else if (player.getFirst_name().contains("3")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
+				chorePlanId[2][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[2][0] > 0);
+				chorePlanId[2][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[2][1] > 0);
+				chorePlanId[2][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[2][2] > 0);
+				chorePlanId[2][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[2][3] > 0);
 			} else if (player.getFirst_name().contains("4")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
-
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						5);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						6);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						7);
-				Assert.assertTrue(returnValue);
+				chorePlanId[3][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[3][0] > 0);
+				chorePlanId[3][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[3][1] > 0);
+				chorePlanId[3][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[3][2] > 0);
+				chorePlanId[3][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[3][3] > 0);
+				chorePlanId[3][4] = service.createChorePlanForPlayer(player.getId(), 5);
+				Assert.assertTrue(chorePlanId[3][4] > 0);
+				chorePlanId[3][5] = service.createChorePlanForPlayer(player.getId(), 6);
+				Assert.assertTrue(chorePlanId[3][5] > 0);
+				chorePlanId[3][6] = service.createChorePlanForPlayer(player.getId(), 7);
+				Assert.assertTrue(chorePlanId[3][6] > 0);
 			} else if (player.getFirst_name().contains("5")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
-
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						5);
-				Assert.assertTrue(returnValue);
+				chorePlanId[4][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[4][0] > 0);
+				chorePlanId[4][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[4][1] > 0);
+				chorePlanId[4][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[4][2] > 0);
+				chorePlanId[4][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[4][3] > 0);
+				chorePlanId[4][4] = service.createChorePlanForPlayer(player.getId(), 5);
+				Assert.assertTrue(chorePlanId[4][4] > 0);
 			} else if (player.getFirst_name().contains("6")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
+				chorePlanId[5][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[5][0] > 0);
+				chorePlanId[5][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[5][1] > 0);
+				chorePlanId[5][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[5][2] > 0);
+				chorePlanId[5][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[5][3] > 0);
 			} else if (player.getFirst_name().contains("7")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
-
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						5);
-				Assert.assertTrue(returnValue);
+				chorePlanId[6][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[6][0] > 0);
+				chorePlanId[6][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[6][1] > 0);
+				chorePlanId[6][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[6][2] > 0);
+				chorePlanId[6][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[6][3] > 0);
+				chorePlanId[6][4] = service.createChorePlanForPlayer(player.getId(), 5);
+				Assert.assertTrue(chorePlanId[6][4] > 0);
 			}
 		}
 
 		// 5. players start to play their chores by calling startChore
+		int i = 0;
 		for (Player player : players) {
-			List<Player_chore_plan> chorePlans = service
-					.getChorePlanByPlayerId(player.getId());
-			for (Player_chore_plan plan : chorePlans) {
-				returnValue = service
-						.startChore(plan.getId(), new Date(), null);
-				Assert.assertTrue(returnValue);
+			for (int j = 0; j < 7; j++) {
+				choreObservedId[i][j] = service.startChore(chorePlanId[i][j], 1, null);
+				Assert.assertTrue(choreObservedId[i][j] > 0);
 			}
+			i++;
 		}
 
 		// 6. players stop their chores by calling stopChore, by passing in
@@ -716,56 +666,52 @@ public class SocialChoringServiceTest {
 		// check if the king is player4
 
 		// 9. delete all the test data
-		deleteAll();
+		deleteAll(service, accountid);
 
 	}
 
 	public void testCalculateWinners4ScenarioE() {
 		SocialChoringService service = new SocialChoringServiceImpl();
 		long[] accountid = new long[3];
+		long[][] chorePlanId = new long[7][7];
+		long[][] choreObservedId = new long[7][7];
 		List<Player> players = new ArrayList<Player>();
 
 		// 1. Create 3 accounts by calling createAccount
 		for (int i = 1; i < 4; i++) {
-			accountid[i - 1] = service.createAccount("parent_first_name " + i,
-					"parent_last_name " + i, "parent_email@xxx.us" + i,
-					"player_first_name" + i);
+			accountid[i - 1] = service.createAccount("parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
 			Assert.assertTrue(accountid[i - 1] > 0);
 		}
-		// 2. add 2 more players to account by calling addNewPlayerToAccount
+		// 2. add 4 more players to account by calling addNewPlayerToAccount
 		// (then we have 7 players in total)
-		boolean returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name4");
+		boolean returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name4");
 		Assert.assertTrue(returnValue);
-		returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name5");
+		returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name5");
 		Assert.assertTrue(returnValue);
-		returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name6");
+		returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name6");
 		Assert.assertTrue(returnValue);
-		returnValue = service.addNewPlayerToAccount(accountid[2],
-				"player_first_name7");
+		returnValue = service.addNewPlayerToAccount(accountid[2], "player_first_name7");
 		Assert.assertTrue(returnValue);
 
 		// 3. some of them are friends, friends matrix as below
 		// Player1 Castle
 		// Player1 = 1, 0, 3, = 4
-		// Player2 = 3, 3, 3, 3, 3 = 15 ¡û winner
+		// Player2 = 3, 3, 3, 3, 3 = 15 ï¿½ï¿½ winner
 		//
 		// Player2 Castle
 		// Player1 = 1, 0, 3, = 4
-		// Player2 = 3, 3, 3, 3, 3 = 15 ¡û winner & NOT King. Two members short.
+		// Player2 = 3, 3, 3, 3, 3 = 15 ï¿½ï¿½ winner & NOT King. Two members short.
 		// Must have 5 in court
 		// Player3 = 3, 3, 3, 3 = 12
 		//
 		// Player3 Castle
 		// Player3 = 3, 3, 3, 3 = 12
-		// Player2 = 3, 2, 2, 3 = 15 ¡û winner
+		// Player2 = 3, 2, 2, 3 = 15 ï¿½ï¿½ winner
 		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13
 		// Player5 = 2, 3, 1, 2, 2, = 10
 		//
 		// Player4 Castle
-		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ¡û winner & King
+		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ï¿½ï¿½ winner & King
 		// Player3 = 3, 3, 3, 3 = 12
 		// Player5 = 2, 3, 1, 2, 2, = 10
 		// Player6 = 0, 1, 2, 3, 0 = 6
@@ -774,170 +720,124 @@ public class SocialChoringServiceTest {
 		//
 		// Player5 Castle
 		// Player3 = 3, 3, 3, 3 = 12
-		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ¡û winner
+		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ï¿½ï¿½ winner
 		// Player5 = 2, 3, 1, 2, 2, = 10
 		//
 		// Player6 Castle
 		// Player6 = 0, 1, 2, 3, 0 = 6
-		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ¡û winner
+		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ï¿½ï¿½ winner
 		//
 		// Player7 Castle
 		// Player7 = 0, 1, 2, 3, 3 = 9
-		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ¡û winner
+		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 ï¿½ï¿½ winner
 
 		for (int i = 1; i < 4; i++) {
 			players.addAll(service.getPlayersForAccount(accountid[i]));
 		}
 
-		returnValue = service.createFriends(new Date(), players.get(0).getId(),
-				players.get(1).getId());
+		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(1).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(1).getId(),
-				players.get(2).getId());
+		returnValue = service.createFriends(new Date(), players.get(1).getId(), players.get(2).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(2).getId(),
-				players.get(3).getId());
+		returnValue = service.createFriends(new Date(), players.get(2).getId(), players.get(3).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(2).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(2).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(3).getId(),
-				players.get(4).getId());
+		returnValue = service.createFriends(new Date(), players.get(3).getId(), players.get(4).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(3).getId(),
-				players.get(5).getId());
+		returnValue = service.createFriends(new Date(), players.get(3).getId(), players.get(5).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(3).getId(),
-				players.get(7).getId());
+		returnValue = service.createFriends(new Date(), players.get(3).getId(), players.get(7).getId());
 		Assert.assertTrue(returnValue);
 
-		
 		// 4. add different chores to each player as the above matrix
 		for (Player player : players) {
 			if (player.getFirst_name().contains("1")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
+				chorePlanId[0][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[0][0] > 0);
+				chorePlanId[0][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[0][1] > 0);
+				chorePlanId[0][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[0][2] > 0);
 			} else if (player.getFirst_name().contains("2")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						5);
-				Assert.assertTrue(returnValue);
+				chorePlanId[1][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[1][0] > 0);
+				chorePlanId[1][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[1][1] > 0);
+				chorePlanId[1][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[1][2] > 0);
+				chorePlanId[1][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[1][3] > 0);
+				chorePlanId[1][4] = service.createChorePlanForPlayer(player.getId(), 5);
+				Assert.assertTrue(chorePlanId[1][4] > 0);
 			} else if (player.getFirst_name().contains("3")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
+				chorePlanId[2][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[2][0] > 0);
+				chorePlanId[2][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[2][1] > 0);
+				chorePlanId[2][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[2][2] > 0);
+				chorePlanId[2][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[2][3] > 0);
 			} else if (player.getFirst_name().contains("4")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
-
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						5);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						6);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						7);
-				Assert.assertTrue(returnValue);
+				chorePlanId[3][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[3][0] > 0);
+				chorePlanId[3][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[3][1] > 0);
+				chorePlanId[3][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[3][2] > 0);
+				chorePlanId[3][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[3][3] > 0);
+				chorePlanId[3][4] = service.createChorePlanForPlayer(player.getId(), 5);
+				Assert.assertTrue(chorePlanId[3][4] > 0);
+				chorePlanId[3][5] = service.createChorePlanForPlayer(player.getId(), 6);
+				Assert.assertTrue(chorePlanId[3][5] > 0);
+				chorePlanId[3][6] = service.createChorePlanForPlayer(player.getId(), 7);
+				Assert.assertTrue(chorePlanId[3][6] > 0);
 			} else if (player.getFirst_name().contains("5")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
-
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						5);
-				Assert.assertTrue(returnValue);
+				chorePlanId[4][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[4][0] > 0);
+				chorePlanId[4][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[4][1] > 0);
+				chorePlanId[4][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[4][2] > 0);
+				chorePlanId[4][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[4][3] > 0);
+				chorePlanId[4][4] = service.createChorePlanForPlayer(player.getId(), 5);
+				Assert.assertTrue(chorePlanId[4][4] > 0);
 			} else if (player.getFirst_name().contains("6")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						5);
-				Assert.assertTrue(returnValue);
+				chorePlanId[5][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[5][0] > 0);
+				chorePlanId[5][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[5][1] > 0);
+				chorePlanId[5][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[5][2] > 0);
+				chorePlanId[5][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[5][3] > 0);
+				chorePlanId[5][4] = service.createChorePlanForPlayer(player.getId(), 5);
+				Assert.assertTrue(chorePlanId[5][4] > 0);
 			} else if (player.getFirst_name().contains("7")) {
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						1);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						2);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						3);
-				Assert.assertTrue(returnValue);
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						4);
-				Assert.assertTrue(returnValue);
-
-				returnValue = service.createChorePlanForPlayer(player.getId(),
-						5);
-				Assert.assertTrue(returnValue);
+				chorePlanId[6][0] = service.createChorePlanForPlayer(player.getId(), 1);
+				Assert.assertTrue(chorePlanId[6][0] > 0);
+				chorePlanId[6][1] = service.createChorePlanForPlayer(player.getId(), 2);
+				Assert.assertTrue(chorePlanId[6][1] > 0);
+				chorePlanId[6][2] = service.createChorePlanForPlayer(player.getId(), 3);
+				Assert.assertTrue(chorePlanId[6][2] > 0);
+				chorePlanId[6][3] = service.createChorePlanForPlayer(player.getId(), 4);
+				Assert.assertTrue(chorePlanId[6][3] > 0);
+				chorePlanId[6][4] = service.createChorePlanForPlayer(player.getId(), 5);
+				Assert.assertTrue(chorePlanId[6][4] > 0);
 			}
 		}
 
 		// 5. players start to play their chores by calling startChore
+		int i = 0;
 		for (Player player : players) {
-			List<Player_chore_plan> chorePlans = service
-					.getChorePlanByPlayerId(player.getId());
-			for (Player_chore_plan plan : chorePlans) {
-				returnValue = service
-						.startChore(plan.getId(), new Date(), null);
-				Assert.assertTrue(returnValue);
+			for (int j = 0; j < 7; j++) {
+				choreObservedId[i][j] = service.startChore(chorePlanId[i][j], 1, null);
+				Assert.assertTrue(choreObservedId[i][j] > 0);
 			}
+			i++;
 		}
 
 		// 6. players stop their chores by calling stopChore, by passing in
@@ -959,13 +859,14 @@ public class SocialChoringServiceTest {
 		// check if the king is player4
 
 		// 9. delete all the test data
-		deleteAll();
-
+		deleteAll(service, accountid);
 
 	}
-	
-	private void deleteAll() {
-		// TODO Auto-generated method stub
+
+	private void deleteAll(SocialChoringService service, long[] accountid) {
+		for (int i = 0; i < accountid.length; i++) {
+			service.deleteAccount(accountid[i]);
+		}
 
 	}
 }

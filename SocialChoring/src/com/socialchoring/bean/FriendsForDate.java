@@ -1,6 +1,6 @@
 package com.socialchoring.bean;
 
-public class Friends_for_date {
+public class FriendsForDate {
 	private int id;
 	private String begin_date;// the date at which this friendship started.
 	private int player_one;// foreign key to PLAYER for the owner

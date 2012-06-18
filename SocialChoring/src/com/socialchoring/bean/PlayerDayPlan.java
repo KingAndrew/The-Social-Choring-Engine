@@ -1,6 +1,6 @@
 package com.socialchoring.bean;
 
-public class Player_day_plan {
+public class PlayerDayPlan {
 	private int id;
 	private int player_id;
 	private String morning_start;

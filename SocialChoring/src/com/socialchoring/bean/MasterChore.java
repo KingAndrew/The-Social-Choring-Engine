@@ -1,6 +1,6 @@
 package com.socialchoring.bean;
 
-public class Master_chore {
+public class MasterChore {
 	private int id;
 	private String name;
 	private String description;// Description of the chore

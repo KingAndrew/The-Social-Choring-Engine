@@ -1,6 +1,6 @@
 package com.socialchoring.bean;
 
-public class Player_games {
+public class PlayerGames {
 	private int id;
 	private int game_id;
 	private int player_id;
