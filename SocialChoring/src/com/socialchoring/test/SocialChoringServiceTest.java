@@ -653,11 +653,11 @@ public class SocialChoringServiceTest {
 
 		// 3. some of them are friends, friends matrix as below
 		// Player1 Castle
-		// Player1 = 1, 0, 4, = 5
+		// Player1 = 1, 0, 3, = 4
 		// Player2 = 3, 2, 2, 3 = 10 -- winner
 		//
 		// Player2 Castle
-		// Player1 = 1, 0, 4, = 5
+		// Player1 = 1, 0, 3, = 4
 		// Player2 = 3, 2, 2, 3 = 10
 		// Player3 = 3, 3, 3, 3 = 12 -- winner
 		//
@@ -825,10 +825,10 @@ public class SocialChoringServiceTest {
 		// 6. players stop their chores by calling stopChore, by passing in
 		// approperiate parameters to achieve the above score UCanCash
 		// matrix.
-		// Player1 = 1, 0, 4
+		// Player1 = 1, 0, 3
 		returnValue = service.stopChore(choreObservedId[0][0], 100, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[0][2], 100, true);
+		returnValue = service.stopChore(choreObservedId[0][2], 9, true);
 		Assert.assertTrue(returnValue);
 		// Player2 = 3, 2, 2, 3
 		returnValue = service.stopChore(choreObservedId[1][0], 2, true);
@@ -903,8 +903,8 @@ public class SocialChoringServiceTest {
 		for (int i = 1; i < 4; i++) {
 			players.addAll(service.getPlayersForAccount(accountid[i]));
 		}
-		// Player1 = 5
-		Assert.assertEquals(players.get(0).getEarnings(), "5");
+		// Player1 = 4
+		Assert.assertEquals(players.get(0).getEarnings(), "4");
 		Assert.assertEquals(players.get(0).getChampion_count(), 0);
 		// Player2 = 10
 		Assert.assertEquals(players.get(1).getEarnings(), "10");
