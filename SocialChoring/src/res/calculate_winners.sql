@@ -189,20 +189,20 @@ CLOSE earnings_curs;
 			WHERE
 				id=v_friend;
 			END LOOP LOOP3;
-	END IF;
+	END IF; 
     SET v_loop_counter = v_loop_counter +1;
   END LOOP LOOP2;
 
 -- now update PLAYER from tmp table
-UPDATE PLAYER
-SET earnings = earnings + player_team.earnings
-WHERE id IN (SELECT player_id FROM player_team);
+update player, player_team 
+set player.earnings = player.earnings + player_team.earnings
+where player.id = player_team.player_id;
 
 
 SELECT * FROM player_team;
 
 -- drop the temp table
--- DROP TEMPORARY TABLE IF EXISTS player_team;
+DROP TEMPORARY TABLE IF EXISTS player_team;
 
 -- select sum(PCO.earnings) from 
 -- PLAYER PL,   -- a specific player
