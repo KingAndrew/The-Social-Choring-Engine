@@ -37,7 +37,7 @@ public class SocialChoringServiceTest {
 
 		// 3. make the 5 players to be friends by calling createFriends
 		for (int i = 1; i < 4; i++) {
-			players.addAll(service.getPlayersForAccount(accountid[i]));
+			players.addAll(service.getPlayersForAccount(accountid[i-1]));
 		}
 
 		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(1).getId());
@@ -104,21 +104,21 @@ public class SocialChoringServiceTest {
 		// approperiate parameters to achieve the folllowing score UCanCash
 		// matrix.
 
-		// Player1 = 1, 2, 3, 1, 0, 2, 3
-		returnValue = service.stopChore(choreObservedId[0][0], 1, false);
+		// Player1 = 1, 2, 3, 0, 0, 2, 3
+		returnValue = service.stopChore(choreObservedId[0][0], 100, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[0][1], 8, true);
+		returnValue = service.stopChore(choreObservedId[0][1], 6, false);
 		Assert.assertTrue(returnValue);
 		returnValue = service.stopChore(choreObservedId[0][2], 2, true);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[0][3], 6, false);
+		returnValue = service.stopChore(choreObservedId[0][3], 100, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[0][5], 20, true);
+		returnValue = service.stopChore(choreObservedId[0][5], 15, true);
 		Assert.assertTrue(returnValue);
 		returnValue = service.stopChore(choreObservedId[0][6], 8, true);
 		Assert.assertTrue(returnValue);
 
-		// Player2 = 2, 3, 1, 3, 2, 1, 2
+		// Player2 = 2, 3, 1, 3, 2, 2, 2
 		returnValue = service.stopChore(choreObservedId[1][0], 5, true);
 		Assert.assertTrue(returnValue);
 		returnValue = service.stopChore(choreObservedId[1][1], 4, true);
@@ -129,55 +129,55 @@ public class SocialChoringServiceTest {
 		Assert.assertTrue(returnValue);
 		returnValue = service.stopChore(choreObservedId[1][4], 5, true);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][5], 20, false);
+		returnValue = service.stopChore(choreObservedId[1][5], 15, true);
 		Assert.assertTrue(returnValue);
 		returnValue = service.stopChore(choreObservedId[1][6], 12, true);
 		Assert.assertTrue(returnValue);
 
 		// player3 = 2, 1, 3, 2, 1, 1, 1
-		returnValue = service.stopChore(choreObservedId[1][0], 5, true);
+		returnValue = service.stopChore(choreObservedId[2][0], 5, true);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][1], 4, false);
+		returnValue = service.stopChore(choreObservedId[2][1], 4, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][2], 2, true);
+		returnValue = service.stopChore(choreObservedId[2][2], 2, true);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][3], 8, true);
+		returnValue = service.stopChore(choreObservedId[2][3], 15, true);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][4], 5, false);
+		returnValue = service.stopChore(choreObservedId[2][4], 5, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][5], 20, false);
+		returnValue = service.stopChore(choreObservedId[2][5], 20, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][6], 12, false);
+		returnValue = service.stopChore(choreObservedId[2][6], 12, false);
 		Assert.assertTrue(returnValue);
 
 		// player4 = 1, 1, 1, 1, 1, 1, 1
-		returnValue = service.stopChore(choreObservedId[1][0], 5, false);
+		returnValue = service.stopChore(choreObservedId[3][0], 1, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][1], 4, false);
+		returnValue = service.stopChore(choreObservedId[3][1], 1, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][2], 2, false);
+		returnValue = service.stopChore(choreObservedId[3][2], 1, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][3], 8, false);
+		returnValue = service.stopChore(choreObservedId[3][3], 1, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][4], 5, false);
+		returnValue = service.stopChore(choreObservedId[3][4], 1, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][5], 20, false);
+		returnValue = service.stopChore(choreObservedId[3][5], 1, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][6], 12, false);
+		returnValue = service.stopChore(choreObservedId[3][6], 1, false);
 		Assert.assertTrue(returnValue);
 
 		// player5 = 1, 3, 2, 1, 0, 2, 1
-		returnValue = service.stopChore(choreObservedId[1][0], 5, false);
+		returnValue = service.stopChore(choreObservedId[4][0], 5, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][1], 4, true);
+		returnValue = service.stopChore(choreObservedId[4][1], 4, true);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][2], 10, true);
+		returnValue = service.stopChore(choreObservedId[4][2], 10, true);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][3], 8, false);
+		returnValue = service.stopChore(choreObservedId[4][3], 8, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][5], 14, true);
+		returnValue = service.stopChore(choreObservedId[4][5], 14, true);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[1][6], 12, false);
+		returnValue = service.stopChore(choreObservedId[4][6], 12, false);
 		Assert.assertTrue(returnValue);
 
 		// 7. call calculateWinners to calculate the winners
@@ -187,7 +187,7 @@ public class SocialChoringServiceTest {
 		// 8. retrieve each of the players by calling getPlayersForAccount to
 		// check if the earnings match the below table
 		players.clear();
-		for (i = 1; i < 4; i++) {
+		for (i = 1; i < 3; i++) {
 			players.addAll(service.getPlayersForAccount(accountid[i]));
 		}
 		// Player1 = 36.3
@@ -232,7 +232,7 @@ public class SocialChoringServiceTest {
 
 		// 3. make the 5 players to be friends by calling createFriends
 		for (int i = 1; i < 4; i++) {
-			players.addAll(service.getPlayersForAccount(accountid[i]));
+			players.addAll(service.getPlayersForAccount(accountid[i-1]));
 		}
 
 		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(1).getId());
@@ -386,7 +386,7 @@ public class SocialChoringServiceTest {
 		// 8. retrieve each of the players by calling getPlayersForAccount to
 		// check if the earnings match the below table
 		players.clear();
-		for (int i = 1; i < 4; i++) {
+		for (int i = 1; i < 3; i++) {
 			players.addAll(service.getPlayersForAccount(accountid[i]));
 		}
 		// Player1 = 19.8
@@ -431,7 +431,7 @@ public class SocialChoringServiceTest {
 
 		// 3. make the 5 players to be friends by calling createFriends
 		for (int i = 1; i < 4; i++) {
-			players.addAll(service.getPlayersForAccount(accountid[i]));
+			players.addAll(service.getPlayersForAccount(accountid[i-1]));
 		}
 
 		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(1).getId());
@@ -603,7 +603,7 @@ public class SocialChoringServiceTest {
 		// 8. retrieve each of the players by calling getPlayersForAccount to
 		// check if the earnings match the below table
 		players.clear();
-		for (int i = 1; i < 4; i++) {
+		for (int i = 1; i < 3; i++) {
 			players.addAll(service.getPlayersForAccount(accountid[i]));
 		}
 		// Player1 = 4.4
@@ -681,7 +681,7 @@ public class SocialChoringServiceTest {
 		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 -- winner
 		// Player5 = 2, 3, 1, 2, 2, = 10
 		for (int i = 1; i < 4; i++) {
-			players.addAll(service.getPlayersForAccount(accountid[i]));
+			players.addAll(service.getPlayersForAccount(accountid[i-1]));
 		}
 		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(1).getId());
 		Assert.assertTrue(returnValue);
@@ -900,7 +900,7 @@ public class SocialChoringServiceTest {
 		// 8. retrieve each of the players by calling getPlayersForAccount to
 		// check if the king is player4
 		players.clear();
-		for (int i = 1; i < 4; i++) {
+		for (int i = 1; i < 3; i++) {
 			players.addAll(service.getPlayersForAccount(accountid[i]));
 		}
 		// Player1 = 4
@@ -993,7 +993,7 @@ public class SocialChoringServiceTest {
 		// Player4 = 2, 1, 2, 2, 2, 2, 2 = 13 -- winner
 
 		for (int i = 1; i < 4; i++) {
-			players.addAll(service.getPlayersForAccount(accountid[i]));
+			players.addAll(service.getPlayersForAccount(accountid[i-1]));
 		}
 
 		returnValue = service.createFriends(new Date(), players.get(0).getId(), players.get(1).getId());
@@ -1220,7 +1220,7 @@ public class SocialChoringServiceTest {
 		// 8. retrieve each of the players by calling getPlayersForAccount to
 		// check if the king is player4
 		players.clear();
-		for (int i = 1; i < 4; i++) {
+		for (int i = 1; i < 3; i++) {
 			players.addAll(service.getPlayersForAccount(accountid[i]));
 		}
 		// Player1 = 4

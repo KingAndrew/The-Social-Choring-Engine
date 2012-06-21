@@ -12,13 +12,12 @@ BEGIN
   UPDATE 
     PLAYER_CHORE_OBSERVED 
   SET
-    time_stoped   = p_time_stoped,
+    time_ended    = p_time_stoped,
     did_complete  = p_did_complete,
-    was_in_time   = min_time <= (p_time_stoped - time_started) <= max_time,
-    observed_time = p_time_stoped - time_started,
-    earnings      = SUM(p_did_complete) + 
-                    SUM(p_did_complete AND (min_time <= (p_time_stoped - time_started) <= max_time)) + 
-                    SUM(p_did_complete AND (min_time <= (p_time_stoped - time_started) <= ideal_time))
+    was_in_time   = p_did_complete AND (min_time <= (p_time_stoped - time_started)) AND ((p_time_stoped - time_started) <= max_time),
+   -- observed_time = p_time_stoped - time_started,
+    earnings      = 1 +  CAST((p_did_complete AND (min_time <= (p_time_stoped - time_started)) AND ((p_time_stoped - time_started) <= max_time)) AS SIGNED INTEGER) + 
+                    CAST((p_did_complete AND (min_time <= (p_time_stoped - time_started)) AND ((p_time_stoped - time_started) <= ideal_time)) AS SIGNED INTEGER)
    WHERE
     id = p_chore_observed_id;
     

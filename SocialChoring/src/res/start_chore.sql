@@ -5,10 +5,10 @@
 DELIMITER $$
 
 CREATE DEFINER=`root`@`localhost` PROCEDURE `start_chore`(IN p_chore_plan_id BIGINT(44), IN p_time_started LONG,
-                                       IN p_date_observed DATE, OUT p_chore_observed_id BIGINT(44))
+                                       IN p_date_observed DATE, OUT o_chore_observed_id BIGINT(44))
 BEGIN
   DECLARE _id BIGINT(44);
-  SET p_chore_observed_id= -1;
+  SET o_chore_observed_id= -1;
   SELECT id FROM PLAYER_CHORE_PLAN WHERE id = p_chore_plan_id INTO _id;
   IF _id = p_chore_plan_id THEN
       INSERT INTO 
@@ -25,6 +25,6 @@ BEGIN
         PLAYER_CHORE_PLAN PCO
       WHERE
         PCO.id = p_chore_plan_id;
-      Set p_chore_observed_id = LAST_INSERT_ID();
+      Set o_chore_observed_id = LAST_INSERT_ID();
  	END IF;  	
 END

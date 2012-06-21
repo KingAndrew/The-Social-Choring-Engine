@@ -4,15 +4,16 @@
 -- --------------------------------------------------------------------------------
 DELIMITER $$
 
-CREATE DEFINER=`root`@`localhost` PROCEDURE `calculate_winners`(IN p_date_observed DATE)
+CREATE DEFINER=`root`@`localhost` PROCEDURE `calculate_winners`(IN p_date_observed DATE, OUT success BOOLEAN)
     DETERMINISTIC
-BEGIN
+BEGIN 
+
 
 -- Scoring: max 3, min 0 points per chore.
 -- Calculating team multiplier
 --   for each friend_for_date 
 --       create a list of the top ten total of PLAYER_CHORE_OBSERVED.earnings for that date.
-
+ 
 --       for each list
 --          player number 1 multiplies their earnings times 1.10 and add that to PLAYER.earnings
 --          player number 2 multiplies their earnings timmes 1.09
@@ -52,11 +53,11 @@ DECLARE v_number_in_team    INT;
 
 
 DECLARE earnings_curs CURSOR FOR
-    SELECT player_id, points_total, did_win_own_team 
+    SELECT player_id, points_total, did_win_own_team, COUNT(*)
 	FROM   player_team;
 
 DECLARE kings_curs CURSOR FOR
-	SELECT player_id, points_total 
+	SELECT player_id, points_total
 	FROM   player_team
     WHERE  did_win_own_team=TRUE
 	GROUP BY player_id 
@@ -70,9 +71,9 @@ DECLARE rewards_curs CURSOR FOR
 	FROM FRIENDS_FOR_DATE AS FFD,
                  PLAYER_CHORE_OBSERVED AS PCO,
 				 PLAYER_CHORE_PLAN AS PCP
-	WHERE FFD.begin_date <= p_date_observed
+	WHERE FFD.begin_date <= p_date_observed 
     GROUP BY friend 
-    ORDER BY points_total DESC
+    ORDER BY points_total DESC 
     LIMIT 9; -- we reward the top ten. we already have the winner
 
 DECLARE CONTINUE HANDLER FOR NOT FOUND SET v_finished = 1;
@@ -111,31 +112,33 @@ INSERT INTO player_team (player_id, points_total, did_win_own_team, earnings )
 
 -- set loop control to not finished
 SET v_finished = FALSE;
+SET success = FALSE;
 
 OPEN earnings_curs;
 -- looping through all the players.
 LOOP1: LOOP
 
     -- descend through player point_total setting v_did_win_own_team
-    FETCH earnings_curs INTO  v_player_id, v_points_total, v_did_win_own_team;
+    FETCH earnings_curs INTO  v_player_id, v_points_total, v_did_win_own_team, v_team_size;
     -- check for v_finished
 	IF v_finished THEN 
          LEAVE LOOP1;
     END IF;
     
-    -- set did_win_own_team to folse if points_total is less than v_points_total
+    -- set did_win_own_team to false if points_total is less than v_points_total
     UPDATE player_team 
-	SET  did_win_own_team=FALSE       
-    WHERE points_total <  v_points_total
-	AND player_id
+        SET  did_win_own_team=FALSE       
+        WHERE points_total <  v_points_total
         -- get all the firends
-        IN (SELECT CASE v_player_id WHEN player_one  THEN player_two
-									WHEN player_two  THEN player_one 
-                   END AS friend
-			FROM FRIENDS_FOR_DATE AS FFD,
-                 PLAYER_CHORE_OBSERVED AS PCO,
-				 PLAYER_CHORE_PLAN AS PCP
-			WHERE FFD.begin_date <= p_date_observed);
+            AND player_id IN (SELECT 
+                    CASE v_player_id 
+                        WHEN player_one  THEN player_two
+                        WHEN player_two  THEN player_one 
+                    END AS friend
+                    FROM FRIENDS_FOR_DATE AS FFD,
+                    PLAYER_CHORE_OBSERVED AS PCO,
+                    PLAYER_CHORE_PLAN AS PCP
+                    WHERE FFD.begin_date <= p_date_observed);
 
 END LOOP LOOP1;
 CLOSE earnings_curs;
@@ -145,7 +148,7 @@ CLOSE earnings_curs;
   OPEN kings_curs;
   SET v_loop_counter = 0;
   LOOP2: LOOP
-      FETCH kings_curs into v_king, v_team_size;
+      FETCH kings_curs into v_king, v_points_total;
 	  -- check for v_finished
       IF v_finished THEN
               SET v_finished := false;
@@ -159,17 +162,16 @@ CLOSE earnings_curs;
       -- first time through process the king first
 	  IF v_loop_counter=0 THEN 
          -- you must have at least 5 friends in your team to get rewards
-        IF v_team_size >=c_min_team_size  
-		THEN 
-			-- update winner first
-			 UPDATE player_team 
-			 SET earnings = earnings + (v_points_total*( 1+ c_base_mulitplier)*v_team_multiplier)
-			 WHERE
-				 id=v_king;
-			-- winner is rewarded now reward the team
-			SET v_loop_counter = v_loop_counter +1;
-			ITERATE	LOOP2;
-		END IF;
+        IF v_team_size >=c_min_team_size  THEN 
+                -- update winner first
+                 UPDATE player_team 
+                 SET earnings = earnings + (v_points_total*( 1+ c_base_mulitplier)*v_team_multiplier)
+                 WHERE
+                     id=v_king;
+                -- winner is rewarded now reward the team
+                SET v_loop_counter = v_loop_counter +1;
+                ITERATE	LOOP2;
+        END IF;
 	  END IF;
         -- reward the team
 	IF(v_team_size >=c_min_team_size )
@@ -194,15 +196,17 @@ CLOSE earnings_curs;
   END LOOP LOOP2;
 
 -- now update PLAYER from tmp table
-update player, player_team 
-set player.earnings = player.earnings + player_team.earnings
-where player.id = player_team.player_id;
+UPDATE player, player_team 
+SET player.earnings = player.earnings + player_team.earnings
+WHERE player.id = player_team.player_id;
 
 
-SELECT * FROM player_team;
+SELECT *,v_team_size FROM player_team;
 
 -- drop the temp table
 DROP TEMPORARY TABLE IF EXISTS player_team;
+
+SET success = TRUE;
 
 -- select sum(PCO.earnings) from 
 -- PLAYER PL,   -- a specific player
