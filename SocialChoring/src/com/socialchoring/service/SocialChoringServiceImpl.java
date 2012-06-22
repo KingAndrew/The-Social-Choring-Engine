@@ -442,7 +442,44 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 
 	@Override
 	public boolean deleteAccount(long acountId) {
-		// TODO Auto-generated method stub
+		CallableStatement callableStatement = null;
+		String createAccountStoreProc = "{call delete_account(?,?)}";
+
+		try {
+			dbConnection = getDBConnection();
+			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
+
+			callableStatement.setLong(1, acountId);
+			callableStatement.registerOutParameter(2, Types.BOOLEAN);
+
+			callableStatement.execute();
+			return callableStatement.getBoolean(2);
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+			if (callableStatement != null) {
+				try {
+					callableStatement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			if (dbConnection != null) {
+				try {
+					dbConnection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
+
 		return false;
 	}
 

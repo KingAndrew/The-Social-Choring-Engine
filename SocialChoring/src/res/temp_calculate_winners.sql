@@ -56,15 +56,22 @@ DECLARE v_number_in_team    INT;
 
 
 DECLARE earnings_curs CURSOR FOR
-    SELECT player_id, points_total, did_win_own_team, COUNT(*)
+    SELECT player_id, points_total, did_win_own_team
 	FROM   player_team;
 
 DECLARE kings_curs CURSOR FOR
 	SELECT player_id, points_total
 	FROM   player_team
-    WHERE  did_win_own_team=TRUE
+    WHERE  did_win_own_team = TRUE
 	GROUP BY player_id 
     ORDER BY points_total DESC;
+
+SELECT player_id AS friend, points_total
+FROM player_team 
+WHERE player_id <> king_id
+AND king_id IS NOT NULL
+ORDER BY points_total DESC;
+
 
 
 DECLARE rewards_curs CURSOR FOR
@@ -73,8 +80,8 @@ DECLARE rewards_curs CURSOR FOR
     (SELECT CASE v_player_id WHEN player_one  THEN player_two
 							WHEN player_two  THEN player_one 
                    END AS friend
-	FROM FRIENDS_FOR_DATE
-	WHERE begin_date <= p_date_observed)
+        FROM FRIENDS_FOR_DATE
+        WHERE begin_date <= p_date_observed)
     GROUP BY friend 
     ORDER BY points_total DESC
     LIMIT 9; -- we reward the top ten. we already have the winner)
@@ -90,16 +97,17 @@ DROP TEMPORARY TABLE IF EXISTS player_team;
 
 -- get all the players total points earned
 CREATE TEMPORARY TABLE player_team  
- 	(player_id BIGINT(44), points_total INT, did_win_own_team BOOLEAN, earnings FLOAT);
+ 	(player_id BIGINT(44), points_total INT, did_win_own_team BOOLEAN, earnings FLOAT, king_id BIGINT(44));
 
 
-INSERT INTO player_team (player_id, points_total, did_win_own_team, earnings )
+INSERT INTO player_team (player_id, points_total, did_win_own_team, earnings, king_id)
 
 
 	SELECT  PLA.id AS player_id,  
             sum(PCO.earnings) AS points_total, 
             TRUE  AS did_win_own_team,   -- everyone starts off winning their own team           
-            sum(PCO.earnings) AS earnings  -- if you aren't in a winning team this is all u get.  
+            sum(PCO.earnings) AS earnings,  -- if you aren't in a winning team this is all u get.  
+            NULL AS king_id
 
      FROM PLAYER_CHORE_OBSERVED AS PCO,
           PLAYER_CHORE_PLAN AS PCP,
@@ -120,27 +128,34 @@ OPEN earnings_curs;
 LOOP1: LOOP
 
     -- descend through player point_total setting v_did_win_own_team
-    FETCH earnings_curs INTO  v_player_id, v_points_total, v_did_win_own_team, v_team_size;
+    FETCH earnings_curs INTO  v_player_id, v_points_total, v_did_win_own_team;
     -- check for v_finished
 	IF v_finished THEN 
          SET v_finished = false;
          LEAVE LOOP1;
   END IF;
     
+    SELECT COUNT(*) 
+        FROM FRIENDS_FOR_DATE AS FFD
+        WHERE FFD.begin_date <= p_date_observed AND
+                v_player_id = player_one OR v_player_id = player_two
+        INTO v_friends;
+    
+    
+    -- you must have at least 5 friends in your team to get rewards
     -- set did_win_own_team to false if points_total is less than v_points_total
     UPDATE player_team 
-        SET  did_win_own_team=FALSE       
-        WHERE points_total <  v_points_total
+        SET  did_win_own_team = FALSE       
+        WHERE (points_total <  v_points_total
         -- get all the firends
             AND player_id IN (SELECT 
                     CASE v_player_id 
                         WHEN player_one  THEN player_two
                         WHEN player_two  THEN player_one 
                     END AS friend
-                    FROM FRIENDS_FOR_DATE AS FFD,
-                    PLAYER_CHORE_OBSERVED AS PCO,
-                    PLAYER_CHORE_PLAN AS PCP
-                    WHERE FFD.begin_date <= p_date_observed);
+                    FROM FRIENDS_FOR_DATE AS FFD
+                    WHERE FFD.begin_date <= p_date_observed))
+            OR v_friends <= (c_min_team_size -1);
 
 END LOOP LOOP1;
 CLOSE earnings_curs;
@@ -159,22 +174,47 @@ CLOSE earnings_curs;
       END IF;
       -- want to compare rankings with each player
 
-	 
-      -- first time through process the king first
+        -- get team size
+        SELECT COUNT(*) 
+        FROM FRIENDS_FOR_DATE AS FFD
+        WHERE FFD.begin_date <= p_date_observed AND
+                v_king = player_one OR v_player_id = player_two
+        INTO v_team_size;
+    
+        -- update winner first
+         UPDATE player_team
+         SET earnings = v_king_points_total*( 1+ c_base_mulitplier)*(v_team_size+1), king_id = v_king
+         WHERE player_id=v_king;
+        
+        -- update the king numbers per team
+        SELECT player_id
+        FROM player_team
+        WHERE king_id IS NOT NULL 
+        AND (SELECT CASE player_id 
+                        WHEN player_one  THEN player_two
+                        WHEN player_two  THEN player_one 
+                    END AS friend
+                    FROM FRIENDS_FOR_DATE AS FFD
+                    WHERE FFD.begin_date <= p_date_observed))
 
-         -- you must have at least 5 friends in your team to get rewards
-        IF v_team_size >=c_min_team_size  THEN 
-                -- update winner first
-                 UPDATE player_team 
-                 SET earnings = v_king_points_total*( 1+ c_base_mulitplier)*v_team_size
-                 WHERE player_id=v_king;
-                -- winner is rewarded now reward the team
-                SET v_loop_counter = v_loop_counter +1;
-        END IF;
+        -- update other team members to have a king
+        UPDATE player_team
+        SET king_id = v_king
+        WHERE player_id IN (SELECT CASE v_king 
+                        WHEN player_one  THEN player_two
+                        WHEN player_two  THEN player_one END
+                    FROM FRIENDS_FOR_DATE AS FFD
+                    WHERE FFD.begin_date <= p_date_observed)
+        AND king_id IS NULL;
+                    
+        INTO v_team_king_size;
+        
+        SET v_loop_counter = v_loop_counter +1;
   END LOOP LOOP2;
   
+        -- winner is rewarded now reward the team
         -- reward the team
-	IF(v_team_size >=c_min_team_size )
+	IF(v_team_size >= c_min_team_size )
 	THEN
 		OPEN rewards_curs;
 		LOOP3: LOOP
