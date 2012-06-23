@@ -138,8 +138,14 @@ LOOP1: LOOP
                         WHEN player_two  THEN player_one 
                     END AS friend
                     FROM FRIENDS_FOR_DATE AS FFD
+<<<<<<< HEAD
                     WHERE FFD.begin_date <= p_date_observed));
   END IF;
+=======
+                    WHERE FFD.begin_date <= p_date_observed))
+            OR v_friends < (c_min_team_size -1);
+
+>>>>>>> branch 'master' of https://github.com/KingAndrew/The-Social-Choring-Engine.git
 END LOOP LOOP1;
 CLOSE earnings_curs;
 
