@@ -25,7 +25,6 @@ DECLARE v_friends          INT;
 DECLARE v_other_kings       INT;
 DECLARE v_other_non_kings   INT;
 
-DECLARE xxx   INT;
 DECLARE v_loop_counter      INT;
 
 -- used to calculate the reward
@@ -241,7 +240,7 @@ UPDATE player, player_team
 SET champion_count = champion_count + 1
 WHERE player.id = player_team.player_id AND did_win_own_team = TRUE;
 
-SELECT *,xxx FROM player_team;
+SELECT * FROM player_team;
 
 -- drop the temp table
 DROP TEMPORARY TABLE IF EXISTS player_team;
