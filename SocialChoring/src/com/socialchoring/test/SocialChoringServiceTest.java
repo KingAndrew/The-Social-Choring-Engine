@@ -824,7 +824,7 @@ public class SocialChoringServiceTest {
 		// Player1 = 1, 0, 3
 		returnValue = service.stopChore(choreObservedId[0][0], 100, false);
 		Assert.assertTrue(returnValue);
-		returnValue = service.stopChore(choreObservedId[0][2], 9, true);
+		returnValue = service.stopChore(choreObservedId[0][2], 3, true);
 		Assert.assertTrue(returnValue);
 		// Player2 = 3, 2, 2, 3
 		returnValue = service.stopChore(choreObservedId[1][0], 2, true);
@@ -907,18 +907,18 @@ public class SocialChoringServiceTest {
 		Assert.assertEquals(players.get(1).getChampion_count(), 0);
 		// Player3 = 12*4.4
 		Assert.assertEquals(players.get(2).getEarnings(), "52.8");
-		Assert.assertEquals(players.get(2).getChampion_count(), 1);
+		Assert.assertEquals(players.get(2).getChampion_count(), 0);
 		// Player4 = 13*5.5 -- king
 		Assert.assertEquals(players.get(3).getEarnings(), "71.5");
-		Assert.assertEquals(players.get(3).getChampion_count(), 0);
+		Assert.assertEquals(players.get(3).getChampion_count(), 1);
 		// Player5 = 10*.3.3
 		Assert.assertEquals(players.get(4).getEarnings(), "33");
 		Assert.assertEquals(players.get(4).getChampion_count(), 0);
 		// Player6 = 9*1.1
 		Assert.assertEquals(players.get(5).getEarnings(), "9.9");
 		Assert.assertEquals(players.get(5).getChampion_count(), 0);
-		// Player7 = 10*3.3
-		Assert.assertEquals(players.get(6).getEarnings(), "33");
+		// Player7 = 10*2.2
+		Assert.assertEquals(players.get(6).getEarnings(), "22");
 		Assert.assertEquals(players.get(6).getChampion_count(), 0);
 
 		// 9. delete all the test data
@@ -1004,7 +1004,7 @@ public class SocialChoringServiceTest {
 		Assert.assertTrue(returnValue);
 		returnValue = service.createFriends(new Date(), players.get(3).getId(), players.get(5).getId());
 		Assert.assertTrue(returnValue);
-		returnValue = service.createFriends(new Date(), players.get(3).getId(), players.get(7).getId());
+		returnValue = service.createFriends(new Date(), players.get(3).getId(), players.get(6).getId());
 		Assert.assertTrue(returnValue);
 
 		// 4. add different chores to each player as the above matrix
@@ -1226,10 +1226,10 @@ public class SocialChoringServiceTest {
 		Assert.assertEquals(players.get(1).getChampion_count(), 0);
 		// Player3 = 12*4.4
 		Assert.assertEquals(players.get(2).getEarnings(), "52.8");
-		Assert.assertEquals(players.get(2).getChampion_count(), 1);
+		Assert.assertEquals(players.get(2).getChampion_count(), 0);
 		// Player4 = 13*5.5 -- king
 		Assert.assertEquals(players.get(3).getEarnings(), "71.5");
-		Assert.assertEquals(players.get(3).getChampion_count(), 0);
+		Assert.assertEquals(players.get(3).getChampion_count(), 1);
 		// Player5 = 10*.3.3
 		Assert.assertEquals(players.get(4).getEarnings(), "33");
 		Assert.assertEquals(players.get(4).getChampion_count(), 0);
