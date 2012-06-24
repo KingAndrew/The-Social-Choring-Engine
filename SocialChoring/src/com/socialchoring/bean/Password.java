@@ -1,5 +1,8 @@
 package com.socialchoring.bean;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Password {
 	private int id;
 	private int owner_id;// A foriegn key to either the PARENT or the PLAYER

@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.socialchoring.bean.Player;
-import com.socialchoring.bean.PlayerChorePlan;
 
 public class SocialChoringServiceImpl implements SocialChoringService {
 	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
@@ -27,13 +26,16 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 	}
 
 	@Override
-	public long createAccount(String parent_first_name, String parent_last_name, String parent_email, String player_first_name) {
+	public long createAccount(String parent_first_name,
+			String parent_last_name, String parent_email,
+			String player_first_name) {
 		CallableStatement callableStatement = null;
 		String createAccountStoreProc = "{call create_account(?,?,?,?,?)}";
 
 		try {
 			dbConnection = getDBConnection();
-			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
+			callableStatement = dbConnection
+					.prepareCall(createAccountStoreProc);
 
 			callableStatement.setString(1, parent_first_name);
 			callableStatement.setString(2, parent_last_name);
@@ -44,7 +46,9 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 			callableStatement.execute();
 			long accountId = callableStatement.getLong(5); // index-based
 
-			System.out.println("Record is inserted into DBUSER table with created accountId=" + accountId);
+			System.out
+					.println("Record is inserted into DBUSER table with created accountId="
+							+ accountId);
 
 			return accountId;
 
@@ -84,18 +88,58 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 
 	@Override
 	public boolean disableAccount(long account_id) {
-		// TODO Auto-generated method stub
+		CallableStatement callableStatement = null;
+		String createAccountStoreProc = "{call disable_account(?,?)}";
+
+		try {
+			dbConnection = getDBConnection();
+			callableStatement = dbConnection
+					.prepareCall(createAccountStoreProc);
+
+			callableStatement.setLong(1, account_id);
+			callableStatement.registerOutParameter(2, Types.BOOLEAN);
+
+			callableStatement.execute();
+			return callableStatement.getBoolean(2);
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+			if (callableStatement != null) {
+				try {
+					callableStatement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			if (dbConnection != null) {
+				try {
+					dbConnection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
+
 		return false;
 	}
 
 	@Override
-	public boolean addNewPlayerToAccount(long account_id, String player_first_name) {
+	public boolean addNewPlayerToAccount(long account_id,
+			String player_first_name) {
 		CallableStatement callableStatement = null;
 		String createAccountStoreProc = "{call add_new_player_to_account(?,?,?)}";
 
 		try {
 			dbConnection = getDBConnection();
-			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
+			callableStatement = dbConnection
+					.prepareCall(createAccountStoreProc);
 
 			callableStatement.setLong(1, account_id);
 			callableStatement.setString(2, player_first_name);
@@ -139,7 +183,8 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		List<Player> players = new ArrayList<Player>();
 		try {
 			dbConnection = getDBConnection();
-			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
+			callableStatement = dbConnection
+					.prepareCall(createAccountStoreProc);
 
 			callableStatement.setLong(1, account_id);
 
@@ -189,13 +234,15 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 	}
 
 	@Override
-	public long createChorePlanForPlayer(long player_id, long chore_plan_to_copy_id) {
+	public long createChorePlanForPlayer(long player_id,
+			long chore_plan_to_copy_id) {
 		CallableStatement callableStatement = null;
 		String createAccountStoreProc = "{call create_chore_plan_for_player(?,?,?)}";
 
 		try {
 			dbConnection = getDBConnection();
-			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
+			callableStatement = dbConnection
+					.prepareCall(createAccountStoreProc);
 
 			callableStatement.setLong(1, player_id);
 			callableStatement.setLong(2, chore_plan_to_copy_id);
@@ -233,15 +280,18 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 	}
 
 	@Override
-	public boolean createFriends(Date date, long player_one_id, long player_two_id) {
+	public boolean createFriends(Date date, long player_one_id,
+			long player_two_id) {
 		CallableStatement callableStatement = null;
 		String createAccountStoreProc = "{call create_friends_for_date(?,?,?,?)}";
 
 		try {
 			dbConnection = getDBConnection();
-			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
+			callableStatement = dbConnection
+					.prepareCall(createAccountStoreProc);
 
-			callableStatement.setDate(1, new java.sql.Date(new Date().getTime()));
+			callableStatement.setDate(1,
+					new java.sql.Date(new Date().getTime()));
 			callableStatement.setLong(2, player_one_id);
 			callableStatement.setLong(3, player_two_id);
 			callableStatement.registerOutParameter(4, Types.BOOLEAN);
@@ -284,17 +334,20 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 	}
 
 	@Override
-	public long startChore(long chore_plan_id, long time_started, Date date_observed) {
+	public long startChore(long chore_plan_id, long time_started,
+			Date date_observed) {
 		CallableStatement callableStatement = null;
 		String createAccountStoreProc = "{call start_chore(?,?,?,?)}";
 
 		try {
 			dbConnection = getDBConnection();
-			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
+			callableStatement = dbConnection
+					.prepareCall(createAccountStoreProc);
 
 			callableStatement.setLong(1, chore_plan_id);
 			callableStatement.setLong(2, time_started);
-			callableStatement.setDate(3, new java.sql.Date(date_observed.getTime()));
+			callableStatement.setDate(3,
+					new java.sql.Date(date_observed.getTime()));
 			callableStatement.registerOutParameter(4, Types.BIGINT);
 
 			callableStatement.execute();
@@ -329,13 +382,15 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 	}
 
 	@Override
-	public boolean stopChore(long chore_observed_id, long time_stoped, boolean did_complete) {
+	public boolean stopChore(long chore_observed_id, long time_stoped,
+			boolean did_complete) {
 		CallableStatement callableStatement = null;
 		String createAccountStoreProc = "{call stop_chore(?,?,?,?)}";
 
 		try {
 			dbConnection = getDBConnection();
-			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
+			callableStatement = dbConnection
+					.prepareCall(createAccountStoreProc);
 
 			callableStatement.setLong(1, chore_observed_id);
 			callableStatement.setLong(2, time_stoped);
@@ -380,9 +435,11 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 
 		try {
 			dbConnection = getDBConnection();
-			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
+			callableStatement = dbConnection
+					.prepareCall(createAccountStoreProc);
 
-			callableStatement.setDate(1, new java.sql.Date(date_observed.getTime()));
+			callableStatement.setDate(1,
+					new java.sql.Date(date_observed.getTime()));
 			callableStatement.registerOutParameter(2, Types.BOOLEAN);
 
 			callableStatement.execute();
@@ -427,17 +484,12 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 				System.out.println(e.getMessage());
 
 			}
-			dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
+			dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER,
+					DB_PASSWORD);
 		}
 
 		return dbConnection;
 
-	}
-
-	@Override
-	public List<PlayerChorePlan> getChorePlanByPlayerId(long playerId) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override
@@ -447,7 +499,8 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 
 		try {
 			dbConnection = getDBConnection();
-			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
+			callableStatement = dbConnection
+					.prepareCall(createAccountStoreProc);
 
 			callableStatement.setLong(1, acountId);
 			callableStatement.registerOutParameter(2, Types.BOOLEAN);

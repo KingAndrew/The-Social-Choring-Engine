@@ -1,5 +1,8 @@
 package com.socialchoring.bean;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Game {
 	private int id;
 	private String company;

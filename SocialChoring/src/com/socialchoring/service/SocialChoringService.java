@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.List;
 
 import com.socialchoring.bean.Player;
-import com.socialchoring.bean.PlayerChorePlan;
 
 public interface SocialChoringService {
 	/**
@@ -121,13 +120,13 @@ public interface SocialChoringService {
 	 */
 	public boolean stopChore(long chore_observed_id, long time_stoped, boolean did_complete);
 
-	/**
-	 * Get player's all chore plans by player id
-	 * 
-	 * @param playerid
-	 * @return
-	 */
-	public List<PlayerChorePlan> getChorePlanByPlayerId(long playerId);
+	// /**
+	// * Get player's all chore plans by player id
+	// *
+	// * @param playerid
+	// * @return
+	// */
+	// public List<PlayerChorePlan> getChorePlanByPlayerId(long playerId);
 
 	/**
 	 * This should be call by a cron job. This is the big daddy that gets run

@@ -1,5 +1,8 @@
 package com.socialchoring.bean;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class FriendsForDate {
 	private int id;
 	private String begin_date;// the date at which this friendship started.
