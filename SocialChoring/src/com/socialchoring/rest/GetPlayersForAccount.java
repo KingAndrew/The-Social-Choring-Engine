@@ -18,16 +18,17 @@ import com.socialchoring.service.SocialChoringServiceImpl;
 public class GetPlayersForAccount {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Player> getTodo(@Context SecurityContext sc, @QueryParam("accountId") long accountId) {
+	public List<Player> getTodo(@QueryParam("accountId") long accountId) {
 		// Principal p = sc.getUserPrincipal();
-		if (!sc.isUserInRole("role")) {
-			System.err.println("user not login........");
-		}
+		// if (!sc.isUserInRole("role")) {
+		// System.err.println("user not login........");
+		// }
 
 		SocialChoringService service = new SocialChoringServiceImpl();
 		List<Player> players = service.getPlayersForAccount(accountId);
 		if (players == null)
-			throw new RuntimeException("Get: Account with " + accountId + " not found");
+			throw new RuntimeException("Get: Account with " + accountId
+					+ " not found");
 		return players;
 	}
 }

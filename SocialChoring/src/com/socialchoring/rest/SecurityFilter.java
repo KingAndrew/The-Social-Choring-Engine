@@ -32,7 +32,8 @@ public class SecurityFilter implements ContainerRequestFilter {
 	 * @param request
 	 */
 	private User authenticate(ContainerRequest request) {
-		String authentication = request.getHeaderValue(ContainerRequest.AUTHORIZATION);
+		String authentication = request
+				.getHeaderValue(ContainerRequest.AUTHORIZATION);
 		if (authentication == null) {
 			System.err.println("no authentication info found");
 			return null;
@@ -43,7 +44,8 @@ public class SecurityFilter implements ContainerRequestFilter {
 			// "Only HTTP Basic authentication is supported"
 		}
 		authentication = authentication.substring("Basic ".length());
-		String[] values = new String(Base64.base64Decode(authentication)).split(":");
+		String[] values = new String(Base64.base64Decode(authentication))
+				.split(":");
 		if (values.length < 2) {
 			throw new WebApplicationException(400);
 			// "Invalid syntax for username and password"
