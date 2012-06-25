@@ -3,7 +3,9 @@ package com.socialchoring.service;
 import java.util.Date;
 import java.util.List;
 
+import com.socialchoring.bean.FriendsForDate;
 import com.socialchoring.bean.Player;
+import com.socialchoring.bean.User;
 
 public interface SocialChoringService {
 	/**
@@ -12,10 +14,9 @@ public interface SocialChoringService {
 	 * @param parentEmail
 	 * @param userName
 	 * @param password
-	 * @return I'm not sure what to return. Probably a session id but you can
-	 *         decide.
+	 * @return User.
 	 */
-	public String login(String parentEmail, String userName, String password);
+	public User login(String parentEmail, String userName, String password);
 
 	/**
 	 * Create an Account
@@ -30,7 +31,6 @@ public interface SocialChoringService {
 	 *            Player first name max length 40
 	 * @return Some value greater than zero representing the account id. If 0 is
 	 *         returned the call was not successful;
-	 * @throws Throwable
 	 */
 	public long createAccount(String parent_first_name, String parent_last_name, String parent_email, String player_first_name);
 
@@ -90,13 +90,14 @@ public interface SocialChoringService {
 	 */
 	public boolean createFriends(Date date, long player_one_id, long player_two_id);
 
-	// Not Implemented
 	/**
 	 * Returns all the friends (aka their court) for a given player
 	 * 
+	 * @param playerId
+	 * @param beginDate
 	 * @return
 	 */
-	public boolean getFriendsForPlayer();
+	public List<FriendsForDate> getFriendsForPlayer(long playerId, Date beginDate);
 
 	/**
 	 * Records the start time for the given chore
@@ -133,10 +134,10 @@ public interface SocialChoringService {
 	 * once a day and calculates all the winners.
 	 */
 	public boolean calculateWinners(Date date_observed);
-	
 
 	/**
-	 * Delete Account with all its players and related chore informations(friendship, chore plan, chore observed and etc.)
+	 * Delete Account with all its players and related chore
+	 * informations(friendship, chore plan, chore observed and etc.)
 	 * 
 	 * @param playerid
 	 * @return
