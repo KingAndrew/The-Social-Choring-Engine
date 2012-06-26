@@ -53,7 +53,7 @@ public class RestTest {
 	public void testGetPlayersForAccountOauth() {
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
-		WebResource service = client.resource(UriBuilder.fromUri("http://localhost:7080/SocialChore").build());
+		WebResource service = client.resource(UriBuilder.fromUri("http://localhost:8080/SocialChore").build());
 		String auth = new String(Base64.encode("kalparser@Twitter"));
 		ClientResponse response = service.path("rest").path("getPlayersForAccount").queryParam("accountId", "1").header(ContainerRequest.AUTHORIZATION, "OAuth " + auth)
 				.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
