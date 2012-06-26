@@ -14,13 +14,14 @@ public class CreateAccount {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public long createAccount(
+			@QueryParam("userName") String userName,
 			@QueryParam("parent_first_name") String parent_first_name,
 			@QueryParam("parent_last_name") String parent_last_name,
 			@QueryParam("parent_email") String parent_email,
 			@QueryParam("player_first_name") String player_first_name) {
 
 		SocialChoringService service = new SocialChoringServiceImpl();
-		long id = service.createAccount(parent_first_name, parent_last_name,
+		long id = service.createAccount(userName, parent_first_name, parent_last_name,
 				parent_email, player_first_name);
 
 		if (id <= 0)

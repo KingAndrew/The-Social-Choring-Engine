@@ -12,7 +12,6 @@ import java.util.List;
 
 import com.socialchoring.bean.FriendsForDate;
 import com.socialchoring.bean.Player;
-import com.socialchoring.bean.User;
 
 public class SocialChoringServiceImpl implements SocialChoringService {
 	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
@@ -22,28 +21,69 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 	static Connection dbConnection = null;
 
 	@Override
-	public User login(String parentEmail, String userName, String password) {
-		// TODO Auto-generated method stub
-		return new User();
-	}
-
-	@Override
-	public long createAccount(String parent_first_name, String parent_last_name, String parent_email, String player_first_name) {
+	public boolean login(String userName, long userId, Date date) {
 		CallableStatement callableStatement = null;
-		String createAccountStoreProc = "{call create_account(?,?,?,?,?)}";
+		String createAccountStoreProc = "{call login(?,?,?,?)}";
 
 		try {
 			dbConnection = getDBConnection();
 			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
 
-			callableStatement.setString(1, parent_first_name);
-			callableStatement.setString(2, parent_last_name);
-			callableStatement.setString(3, parent_email);
-			callableStatement.setString(4, player_first_name);
-			callableStatement.registerOutParameter(5, Types.BIGINT);
+			callableStatement.setString(1, userName);
+			callableStatement.setLong(2, userId);
+			callableStatement.setTimestamp(3, new java.sql.Timestamp(date.getTime()));
+			callableStatement.registerOutParameter(4, Types.BOOLEAN);
 
 			callableStatement.execute();
-			long accountId = callableStatement.getLong(5); // index-based
+			boolean success = callableStatement.getBoolean(4); // index-based
+			return success;
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+			if (callableStatement != null) {
+				try {
+					callableStatement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			if (dbConnection != null) {
+				try {
+					dbConnection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
+
+		return false;
+	}
+
+	@Override
+	public long createAccount(String userName, String parent_first_name, String parent_last_name, String parent_email, String player_first_name) {
+		CallableStatement callableStatement = null;
+		String createAccountStoreProc = "{call create_account(?,?,?,?,?,?)}";
+
+		try {
+			dbConnection = getDBConnection();
+			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
+
+			callableStatement.setString(1, userName);
+			callableStatement.setString(2, parent_first_name);
+			callableStatement.setString(3, parent_last_name);
+			callableStatement.setString(4, parent_email);
+			callableStatement.setString(5, player_first_name);
+			callableStatement.registerOutParameter(6, Types.BIGINT);
+
+			callableStatement.execute();
+			long accountId = callableStatement.getLong(6); // index-based
 
 			System.out.println("Record is inserted into DBUSER table with created accountId=" + accountId);
 
@@ -527,6 +567,49 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
 
 			callableStatement.setLong(1, acountId);
+			callableStatement.registerOutParameter(2, Types.BOOLEAN);
+
+			callableStatement.execute();
+			return callableStatement.getBoolean(2);
+
+		} catch (SQLException e) {
+
+			System.out.println(e.getMessage());
+
+		} finally {
+			if (callableStatement != null) {
+				try {
+					callableStatement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			if (dbConnection != null) {
+				try {
+					dbConnection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
+
+		return false;
+	}
+
+	@Override
+	public boolean verifyUser(String username) {
+		CallableStatement callableStatement = null;
+		String createAccountStoreProc = "{call verify_user(?,?)}";
+
+		try {
+			dbConnection = getDBConnection();
+			callableStatement = dbConnection.prepareCall(createAccountStoreProc);
+
+			callableStatement.setString(1, username);
 			callableStatement.registerOutParameter(2, Types.BOOLEAN);
 
 			callableStatement.execute();

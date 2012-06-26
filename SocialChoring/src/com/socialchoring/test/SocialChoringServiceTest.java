@@ -22,10 +22,13 @@ public class SocialChoringServiceTest {
 		long[][] choreObservedId = new long[5][7];
 		List<Player> players = new ArrayList<Player>();
 
+		// init login
+		service.login("kalparser@Twitter", 12345, new Date());
+
 		// 1. Create several accounts by calling createAccount (say 3 accounts
 		// which means 3 parents, right?)
 		for (int i = 1; i < 4; i++) {
-			accountid[i - 1] = service.createAccount("parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
+			accountid[i - 1] = service.createAccount("kalparser@Twitter", "parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
 			Assert.assertTrue(accountid[i - 1] > 0);
 		}
 		// 2. add 2 more players to account by calling addNewPlayerToAccount
@@ -218,9 +221,12 @@ public class SocialChoringServiceTest {
 		long[][] choreObservedId = new long[5][7];
 		List<Player> players = new ArrayList<Player>();
 
+		// init login
+		service.login("kalparser@Twitter", 12345, new Date());
+
 		// 1. Create 3 accounts by calling createAccount
 		for (int i = 1; i < 4; i++) {
-			accountid[i - 1] = service.createAccount("parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
+			accountid[i - 1] = service.createAccount("kalparser@Twitter", "parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
 			Assert.assertTrue(accountid[i - 1] > 0);
 		}
 		// 2. add 2 more players to account by calling addNewPlayerToAccount
@@ -415,9 +421,12 @@ public class SocialChoringServiceTest {
 		long[][] choreObservedId = new long[5][7];
 		List<Player> players = new ArrayList<Player>();
 
+		// init login
+		service.login("kalparser@Twitter", 12345, new Date());
+
 		// 1. Create 3 accounts by calling createAccount
 		for (int i = 1; i < 4; i++) {
-			accountid[i - 1] = service.createAccount("parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
+			accountid[i - 1] = service.createAccount("kalparser@Twitter", "parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
 			Assert.assertTrue(accountid[i - 1] > 0);
 		}
 		// 2. add 2 more players to account by calling addNewPlayerToAccount
@@ -632,9 +641,12 @@ public class SocialChoringServiceTest {
 		long[][] choreObservedId = new long[7][7];
 		List<Player> players = new ArrayList<Player>();
 
+		// init login
+		service.login("kalparser@Twitter", 12345, new Date());
+
 		// 1. Create 3 accounts by calling createAccount
 		for (int i = 1; i < 4; i++) {
-			accountid[i - 1] = service.createAccount("parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
+			accountid[i - 1] = service.createAccount("kalparser@Twitter", "parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
 			Assert.assertTrue(accountid[i - 1] > 0);
 		}
 		// 2. add 4 more players to account by calling addNewPlayerToAccount
@@ -934,9 +946,12 @@ public class SocialChoringServiceTest {
 		long[][] choreObservedId = new long[7][7];
 		List<Player> players = new ArrayList<Player>();
 
+		// init login
+		service.login("kalparser@Twitter", 12345, new Date());
+
 		// 1. Create 3 accounts by calling createAccount
 		for (int i = 1; i < 4; i++) {
-			accountid[i - 1] = service.createAccount("parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
+			accountid[i - 1] = service.createAccount("kalparser@Twitter", "parent_first_name " + i, "parent_last_name " + i, "parent_email@xxx.us" + i, "player_first_name" + i);
 			Assert.assertTrue(accountid[i - 1] > 0);
 		}
 		// 2. add 4 more players to account by calling addNewPlayerToAccount

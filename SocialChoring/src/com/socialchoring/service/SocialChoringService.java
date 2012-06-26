@@ -5,22 +5,23 @@ import java.util.List;
 
 import com.socialchoring.bean.FriendsForDate;
 import com.socialchoring.bean.Player;
-import com.socialchoring.bean.User;
 
 public interface SocialChoringService {
 	/**
 	 * Login to the system
 	 * 
-	 * @param parentEmail
 	 * @param userName
+	 * @param userId
 	 * @param password
-	 * @return User.
+	 * @return boolean.
 	 */
-	public User login(String parentEmail, String userName, String password);
+	public boolean login(String userName, long userId, Date date);
 
 	/**
 	 * Create an Account
 	 * 
+	 * @param userName
+	 *            User name max length 40
 	 * @param parent_first_name
 	 *            Parent first name max length 40
 	 * @param parent_last_name
@@ -32,7 +33,7 @@ public interface SocialChoringService {
 	 * @return Some value greater than zero representing the account id. If 0 is
 	 *         returned the call was not successful;
 	 */
-	public long createAccount(String parent_first_name, String parent_last_name, String parent_email, String player_first_name);
+	public long createAccount(String userName, String parent_first_name, String parent_last_name, String parent_email, String player_first_name);
 
 	/**
 	 * Not Implemented I don't remember the reason for this. It could be a
@@ -143,5 +144,7 @@ public interface SocialChoringService {
 	 * @return
 	 */
 	public boolean deleteAccount(long acountId);
+
+	public boolean verifyUser(String username);
 
 }
