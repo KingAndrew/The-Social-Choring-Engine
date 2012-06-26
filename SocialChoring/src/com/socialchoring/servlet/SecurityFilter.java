@@ -23,7 +23,7 @@ public class SecurityFilter implements Filter {
 	 * Perform the required authentication checks, and return the verification
 	 * result.
 	 * 
-	 * @param servletRequest2
+	 * @param servletRequest
 	 * 
 	 */
 	private boolean authenticate(HttpServletRequest servletRequest) {
