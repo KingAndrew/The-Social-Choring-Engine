@@ -14,8 +14,8 @@ import javax.ws.rs.WebApplicationException;
 
 import com.socialchoring.service.SocialChoringService;
 import com.socialchoring.service.SocialChoringServiceImpl;
+import com.socialchoring.util.CookieUtil;
 import com.sun.jersey.core.util.Base64;
-import com.sun.jersey.spi.container.ContainerRequest;
 
 public class SecurityFilter implements Filter {
 
@@ -27,17 +27,17 @@ public class SecurityFilter implements Filter {
 	 * 
 	 */
 	private boolean authenticate(HttpServletRequest servletRequest) {
-		String authentication = servletRequest.getHeader(ContainerRequest.AUTHORIZATION);
+		String authentication = CookieUtil.getCookieValue(servletRequest.getCookies(), "SocialChoreCookie");
 		if (authentication == null) {
 			System.err.println("no authentication info found");
 			return false;
 		}
-		if (!authentication.startsWith("OAuth ")) {
-			return false;
-			// additional checks should be done here
-			// "Only HTTP Basic authentication is supported"
-		}
-		authentication = authentication.substring("OAuth ".length());
+		// if (!authentication.startsWith("OAuth ")) {
+		// return false;
+		// // additional checks should be done here
+		// // "Only HTTP Basic authentication is supported"
+		// }
+		// authentication = authentication.substring("OAuth ".length());
 		String username = new String(Base64.base64Decode(authentication));
 		if (username == null) {
 			throw new WebApplicationException(400);
@@ -79,8 +79,8 @@ public class SecurityFilter implements Filter {
 		if (verified) {
 			filterChain.doFilter(request, response);
 		} else {
-			((HttpServletResponse) response).sendRedirect(servletRequest.getContextPath() + "/signin");
-			
+			((HttpServletResponse) response).sendRedirect(servletRequest.getContextPath() + "/");
+
 		}
 	}
 

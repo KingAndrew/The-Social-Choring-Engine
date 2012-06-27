@@ -15,6 +15,8 @@ import twitter4j.auth.RequestToken;
 
 import com.socialchoring.service.SocialChoringService;
 import com.socialchoring.service.SocialChoringServiceImpl;
+import com.socialchoring.util.CookieUtil;
+import com.sun.jersey.core.util.Base64;
 
 public class CallbackServlet extends HttpServlet {
 	private static final long serialVersionUID = 1657390011452788111L;
@@ -25,9 +27,12 @@ public class CallbackServlet extends HttpServlet {
 		String verifier = request.getParameter("oauth_verifier");
 		try {
 			AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
-			request.getSession().setAttribute("accessToken", accessToken.getToken());
-			request.getSession().setAttribute("userName", accessToken.getScreenName() + "@Twitter");
-			request.getSession().setAttribute("userId", accessToken.getUserId());
+			// request.getSession().setAttribute("accessToken",
+			// accessToken.getToken());
+			// request.getSession().setAttribute("userName",
+			// accessToken.getScreenName() + "@Twitter");
+			// request.getSession().setAttribute("userId",
+			// accessToken.getUserId());
 			request.getSession().removeAttribute("requestToken");
 
 			SocialChoringService service = new SocialChoringServiceImpl();
@@ -35,9 +40,12 @@ public class CallbackServlet extends HttpServlet {
 			if (!success) {
 				response.sendRedirect(request.getContextPath() + "/signin");
 			}
+			response.addCookie(CookieUtil.getCookie(request.getCookies(), "SocialChoreCookie", 
+					new String(Base64.encode(accessToken.getScreenName() + "@Twitter"))));
 		} catch (TwitterException e) {
 			throw new ServletException(e);
 		}
 		response.sendRedirect(request.getContextPath() + "/");
 	}
+
 }

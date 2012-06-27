@@ -10,26 +10,15 @@
 <%@page import="javax.ws.rs.core.UriBuilder"%>
 <%@page import="com.sun.jersey.api.client.config.DefaultClientConfig"%>
 <%@page import="com.sun.jersey.core.util.Base64"%>
+<%@page import="com.socialchoring.util.CookieUtil"%>
 
 <%
-	String userName = (String) request.getSession().getAttribute(
-			"userName");
-	if (userName == null) {
-		response.sendRedirect(request.getContextPath() + "/");
-		return;
-	}
-
 	ClientConfig config1 = new DefaultClientConfig();
 	Client client = Client.create(config1);
-	WebResource service = client.resource(UriBuilder.fromUri(
-			"http://localhost:8080/SocialChore").build());
-	String auth = new String(Base64.encode(userName));
-	ClientResponse response1 = service.path("rest")
-			.path("getPlayersForAccount").queryParam("accountId", "1")
-			.header(ContainerRequest.AUTHORIZATION, "OAuth " + auth)
-			.accept(MediaType.APPLICATION_JSON)
-			.get(ClientResponse.class);
+	WebResource service = client.resource(UriBuilder.fromUri("http://localhost:8080/SocialChore").build());
+	ClientResponse response1 = service.path("rest").path("getPlayersForAccount").queryParam("accountId", "1")
+			.cookie(new javax.ws.rs.core.Cookie("SocialChoreCookie", CookieUtil.getCookieValue(request.getCookies(), "SocialChoreCookie")))
+			.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 %>
 <%="reponse status: " + response1.getStatus()%>
-<%="jason string for getPlayersForAccount: \n"
-					+ response1.getEntity(String.class)%>
+<%="jason string for getPlayersForAccount: \n" + response1.getEntity(String.class)%>

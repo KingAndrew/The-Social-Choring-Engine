@@ -4,27 +4,31 @@
 
 
 <%
-Long userId = (Long) request.getSession().getAttribute("userId");
-String userName = (String) request.getSession().getAttribute("userName");
-
-com.socialchoring.service.SocialChoringService service = new com.socialchoring.service.SocialChoringServiceImpl();
-boolean verified = service.verifyUser(userName);
-if(!verified || userName==null){
+	boolean verified = false;
+	String userName = null;
+	String authentication = com.socialchoring.util.CookieUtil.getCookieValue(request.getCookies(), "SocialChoreCookie");
+	if (authentication != null) {
+		userName = new String(com.sun.jersey.core.util.Base64.base64Decode(authentication));
+		com.socialchoring.service.SocialChoringService service = new com.socialchoring.service.SocialChoringServiceImpl();
+		verified = service.verifyUser(userName);
+	}
+	if (!verified) {
 %>
-	Welcome! Please <a href="/SocialChore/signin">Login through twitter</a>
+Welcome! Please
+<a href="/SocialChore/signin">Login through twitter</a>
 <%
-}
-else{
-	
+	} else {
 %>
 
-Welcome! 
-	
+Welcome!
+
 <%=userName%>
 
 
-	You can try <a href="/SocialChore/getPlayersForAccount.jsp">GetPlayersForAccount with accountId=1</a>
+You can try
+<a href="/SocialChore/getPlayersForAccount.jsp">GetPlayersForAccount
+	with accountId=1</a>
 <%
-}
+	}
 %>
 

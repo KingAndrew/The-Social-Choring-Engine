@@ -1,6 +1,7 @@
 package com.socialchoring.test;
 
 import javax.ws.rs.Path;
+import javax.ws.rs.core.Cookie;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriBuilder;
 
@@ -40,6 +41,21 @@ public class RestTest {
 		WebResource service = client.resource(UriBuilder.fromUri("http://localhost:8080/SocialChore").build());
 		String auth = new String(Base64.encode("username:password"));
 		ClientResponse response = service.path("rest").path("getPlayersForAccount").queryParam("accountId", "1").header(ContainerRequest.AUTHORIZATION, "Basic " + auth)
+				.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
+		int statusCode = response.getStatus();
+		if (statusCode == 401) {
+			System.err.println("Invalid Username or Password");
+		}
+		System.err.println(response.getEntity(String.class));
+	}
+
+	@Test
+	public void testGetPlayersForAccountCookie() {
+		ClientConfig config = new DefaultClientConfig();
+		Client client = Client.create(config);
+		WebResource service = client.resource(UriBuilder.fromUri("http://localhost:8080/SocialChore").build());
+		String auth = new String(Base64.encode("username:password"));
+		ClientResponse response = service.path("rest").path("getPlayersForAccount").queryParam("accountId", "1").cookie(new Cookie("SocialChoreCookie","xxx"))
 				.accept(MediaType.APPLICATION_JSON).get(ClientResponse.class);
 		int statusCode = response.getStatus();
 		if (statusCode == 401) {
