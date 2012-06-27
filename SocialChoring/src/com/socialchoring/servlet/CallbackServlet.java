@@ -25,6 +25,11 @@ public class CallbackServlet extends HttpServlet {
 		Twitter twitter = (Twitter) request.getSession().getAttribute("twitter");
 		RequestToken requestToken = (RequestToken) request.getSession().getAttribute("requestToken");
 		String verifier = request.getParameter("oauth_verifier");
+		String denied = request.getParameter("denied");
+		if (denied != null) {
+			response.sendRedirect(request.getContextPath() + "/accessdeny.jsp");
+			return;
+		}
 		try {
 			AccessToken accessToken = twitter.getOAuthAccessToken(requestToken, verifier);
 			// request.getSession().setAttribute("accessToken",
@@ -39,9 +44,9 @@ public class CallbackServlet extends HttpServlet {
 			boolean success = service.login(accessToken.getScreenName() + "@Twitter", accessToken.getUserId(), new Date());
 			if (!success) {
 				response.sendRedirect(request.getContextPath() + "/signin");
+				return;
 			}
-			response.addCookie(CookieUtil.getCookie(request.getCookies(), "SocialChoreCookie", 
-					new String(Base64.encode(accessToken.getScreenName() + "@Twitter"))));
+			response.addCookie(CookieUtil.getCookie(request.getCookies(), "SocialChoreCookie", new String(Base64.encode(accessToken.getScreenName() + "@Twitter"))));
 		} catch (TwitterException e) {
 			throw new ServletException(e);
 		}
