@@ -25,7 +25,7 @@ public class CreateAccount {
 				parent_email, player_first_name);
 
 		if (id <= 0)
-			throw new RuntimeException("Get: Create Account with Failed.");
+			throw new RuntimeException("Get: Create Account Failed.");
 		return id;
 
 	}

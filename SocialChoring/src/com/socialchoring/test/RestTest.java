@@ -66,7 +66,7 @@ public class RestTest {
 
 
 	@Test
-	public void testGetPlayersForAccountOauth() {
+	public void testGetPlayersForAccountOauthHeader() {
 		ClientConfig config = new DefaultClientConfig();
 		Client client = Client.create(config);
 		WebResource service = client.resource(UriBuilder.fromUri("http://localhost:8080/SocialChore").build());
