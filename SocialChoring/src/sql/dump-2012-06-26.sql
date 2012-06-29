@@ -121,7 +121,7 @@ CREATE TABLE `users` (
   `session_start` datetime DEFAULT NULL,
   `disabled` tinyint(1) DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `user_name_UNIQUE` (`id`)
+  UNIQUE KEY `user_name_UNIQUE` (`user_name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
