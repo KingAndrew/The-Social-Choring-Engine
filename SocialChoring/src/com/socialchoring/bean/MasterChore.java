@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class MasterChore {
-	private int id;
+	private long id;
 	private String name;
 	private String description;// Description of the chore
 	private String ideal_time;
@@ -12,11 +12,11 @@ public class MasterChore {
 	private String min_time;
 	private int parent_chore;// null unless this is a sub core.
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

@@ -4,15 +4,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Game {
-	private int id;
+	private long id;
 	private String company;
 	private String name_of_game;
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

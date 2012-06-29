@@ -4,16 +4,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class FriendsForDate {
-	private int id;
+	private long id;
 	private String begin_date;// the date at which this friendship started.
-	private int player_one;// foreign key to PLAYER for the owner
-	private int player_two;// foreign key to PLAYER for the friends
+	private long player_one;// foreign key to PLAYER for the owner
+	private long player_two;// foreign key to PLAYER for the friends
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -25,15 +25,15 @@ public class FriendsForDate {
 		this.begin_date = begin_date;
 	}
 
-	public int getPlayer_one() {
+	public long getPlayer_one() {
 		return this.player_one;
 	}
 
-	public void setPlayer_one(int player_one) {
+	public void setPlayer_one(long player_one) {
 		this.player_one = player_one;
 	}
 
-	public int getPlayer_two() {
+	public long getPlayer_two() {
 		return this.player_two;
 	}
 

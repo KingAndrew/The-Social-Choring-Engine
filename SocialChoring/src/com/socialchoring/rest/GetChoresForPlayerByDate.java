@@ -9,19 +9,19 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import com.socialchoring.bean.FriendsForDate;
+import com.socialchoring.bean.PlayerChorePlan;
 import com.socialchoring.service.SocialChoringService;
 import com.socialchoring.service.SocialChoringServiceImpl;
 
-@Path("/getFriendsForPlayer")
-public class GetFriendsForPlayer {
+@Path("/getChoresForPlayerByDate")
+public class GetChoresForPlayerByDate {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<FriendsForDate> getChoresForPlayerByDate(@QueryParam("playerId") long playerId, @QueryParam("beginDate") Date beginDate) {
+	public List<PlayerChorePlan> getChoresForPlayerByDate(@QueryParam("playerId") long playerId, @QueryParam("date") Date date) {
 		SocialChoringService service = new SocialChoringServiceImpl();
-		List<FriendsForDate> friends = service.getFriendsForPlayer(playerId, beginDate);
-		if (friends == null)
-			throw new RuntimeException("Get: Player with " + playerId + " has no friend found");
-		return friends;
+		List<PlayerChorePlan> plans = service.getChoresForPlayerByDate(playerId, date);
+		if (plans == null)
+			throw new RuntimeException("Get: Player with " + playerId + " has no chore plan found");
+		return plans;
 	}
 }

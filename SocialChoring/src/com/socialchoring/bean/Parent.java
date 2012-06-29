@@ -4,17 +4,17 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Parent {
-	private int id;
+	private long id;
 	private String email;
 	private String first_name;
 	private String last_name;
 	private int address_id;// a foriegn key that points to ADDRESS
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 

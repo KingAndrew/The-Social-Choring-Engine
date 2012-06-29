@@ -4,24 +4,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Password {
-	private int id;
-	private int owner_id;// A foriegn key to either the PARENT or the PLAYER
+	private long id;
+	private long owner_id;// A foriegn key to either the PARENT or the PLAYER
 	private String password;
 	private String password_hint;
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	public int getOwner_id() {
+	public long getOwner_id() {
 		return this.owner_id;
 	}
 
-	public void setOwner_id(int owner_id) {
+	public void setOwner_id(long owner_id) {
 		this.owner_id = owner_id;
 	}
 

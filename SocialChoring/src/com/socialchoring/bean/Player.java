@@ -4,7 +4,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class Player {
-	private int id;
+	private long id;
 
 	private String first_name;// I would like to make the first name unique for
 								// each parent_id.
@@ -12,16 +12,16 @@ public class Player {
 	private int champion_count;// When a player earns more than any of his
 								// friends for the day that player gets one
 								// additional award_count.
-	private int parent_id;
+	private long parent_id;
 	private String date_added;
 	private String date_validated;
 	private int version;// Version of the table
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
@@ -49,11 +49,11 @@ public class Player {
 		this.champion_count = champion_count;
 	}
 
-	public int getParent_id() {
+	public long getParent_id() {
 		return this.parent_id;
 	}
 
-	public void setParent_id(int parent_id) {
+	public void setParent_id(long parent_id) {
 		this.parent_id = parent_id;
 	}
 

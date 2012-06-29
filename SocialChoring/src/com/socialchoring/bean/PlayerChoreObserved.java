@@ -1,8 +1,8 @@
 package com.socialchoring.bean;
 
 public class PlayerChoreObserved {
-	private int id;
-	private int chore_plan_id;
+	private long id;
+	private long chore_plan_id;
 	private String date_observed;
 	private String time_ended;
 	private String time_started;// when the chore was started.
@@ -17,19 +17,19 @@ public class PlayerChoreObserved {
 							// <=max_time) {+1 if(min_time >= observed_time <=
 							// ideal_time) +1}}}
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	public int getChore_plan_id() {
+	public long getChore_plan_id() {
 		return this.chore_plan_id;
 	}
 
-	public void setChore_plan_id(int chore_plan_id) {
+	public void setChore_plan_id(long chore_plan_id) {
 		this.chore_plan_id = chore_plan_id;
 	}
 

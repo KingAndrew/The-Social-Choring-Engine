@@ -16,7 +16,7 @@ import com.socialchoring.service.SocialChoringServiceImpl;
 public class GetPlayersForAccount {
 	@GET
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
-	public List<Player> getTodo(@QueryParam("accountId") long accountId) {
+	public List<Player> getPlayersForAccount(@QueryParam("accountId") long accountId) {
 		// Principal p = sc.getUserPrincipal();
 		// if (!sc.isUserInRole("role")) {
 		// System.err.println("user not login........");

@@ -2,7 +2,7 @@ package com.socialchoring.rest;
 
 import java.util.Date;
 
-import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
@@ -13,7 +13,7 @@ import com.socialchoring.service.SocialChoringServiceImpl;
 
 @Path("/createFriends")
 public class CreateFriends {
-	@GET
+	@POST
 	@Produces({ MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON })
 	public boolean createFriends(@QueryParam("playerOneId") long playerOneId,
 			@QueryParam("playerTwoId") long playerTwoId) {

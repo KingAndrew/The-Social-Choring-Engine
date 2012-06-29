@@ -4,8 +4,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement
 public class PlayerChorePlan {
-	private int id;
-	private int player_id;
+	private long id;
+	private long player_id;
 	private String name;
 	private String description;
 	private String how_often;
@@ -14,19 +14,19 @@ public class PlayerChorePlan {
 	private String min_time;
 	private String max_time;
 
-	public int getId() {
+	public long getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(long id) {
 		this.id = id;
 	}
 
-	public int getPlayer_id() {
+	public long getPlayer_id() {
 		return this.player_id;
 	}
 
-	public void setPlayer_id(int player_id) {
+	public void setPlayer_id(long player_id) {
 		this.player_id = player_id;
 	}
 
