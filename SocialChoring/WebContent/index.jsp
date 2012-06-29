@@ -6,10 +6,10 @@
 <%
 	boolean verified = false;
 	String userName = null;
-	String authentication = com.socialchoring.util.CookieUtil.getCookieValue(request.getCookies(), "SocialChoreCookie");
+	String authentication = com.socialchoring.engine.util.CookieUtil.getCookieValue(request.getCookies(), "SocialChoreCookie");
 	if (authentication != null) {
 		userName = new String(com.sun.jersey.core.util.Base64.base64Decode(authentication));
-		com.socialchoring.service.SocialChoringService service = new com.socialchoring.service.SocialChoringServiceImpl();
+		com.socialchoring.engine.service.SocialChoringService service = new com.socialchoring.engine.service.SocialChoringServiceImpl();
 		verified = service.verifyUser(userName);
 	}
 	if (!verified) {

@@ -10,7 +10,7 @@
 <%@page import="javax.ws.rs.core.UriBuilder"%>
 <%@page import="com.sun.jersey.api.client.config.DefaultClientConfig"%>
 <%@page import="com.sun.jersey.core.util.Base64"%>
-<%@page import="com.socialchoring.util.CookieUtil"%>
+<%@page import="com.socialchoring.engine.util.CookieUtil"%>
 
 <%
 	ClientConfig config1 = new DefaultClientConfig();
