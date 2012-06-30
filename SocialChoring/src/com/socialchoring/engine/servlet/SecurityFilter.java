@@ -10,7 +10,6 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.WebApplicationException;
 
 import com.socialchoring.engine.service.SocialChoringService;
 import com.socialchoring.engine.service.SocialChoringServiceImpl;
@@ -39,11 +38,6 @@ public class SecurityFilter implements Filter {
 		// }
 		// authentication = authentication.substring("OAuth ".length());
 		String username = new String(Base64.base64Decode(authentication));
-		if (username == null) {
-			throw new WebApplicationException(400);
-			// "Missing username"
-		}
-
 		SocialChoringService service = new SocialChoringServiceImpl();
 		boolean verified = service.verifyUser(username);
 		if (verified) {

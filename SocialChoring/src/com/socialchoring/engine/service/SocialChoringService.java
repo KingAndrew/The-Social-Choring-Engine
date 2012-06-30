@@ -149,4 +149,6 @@ public interface SocialChoringService {
 
 	public boolean verifyUser(String username);
 
+	public long getAccountForUser(String username);
+
 }

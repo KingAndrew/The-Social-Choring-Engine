@@ -699,4 +699,46 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		return chorePlans;
 	}
 
+	@Override
+	public long getAccountForUser(String username) {
+		CallableStatement callableStatement = null;
+		String storeProc = "{call get_account_for_user(?,?)}";
+		try {
+			dbConnection = getDBConnection();
+			callableStatement = dbConnection.prepareCall(storeProc);
+
+			callableStatement.setString(1, username);
+			callableStatement.registerOutParameter(2, Types.BIGINT);
+			
+
+			callableStatement.execute();
+			long accountId = callableStatement.getLong(2); // index-based
+
+			return accountId;
+		} catch (SQLException e) {
+			System.out.println(e.getMessage());
+		} finally {
+
+			if (callableStatement != null) {
+				try {
+					callableStatement.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+			if (dbConnection != null) {
+				try {
+					dbConnection.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+
+		}
+		return 0;
+	}
+
 }
