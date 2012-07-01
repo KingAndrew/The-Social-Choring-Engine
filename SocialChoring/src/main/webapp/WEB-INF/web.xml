@@ -4,6 +4,15 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	id="WebApp_ID" version="2.5">
 	<display-name>SocialChore</display-name>
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:META-INF/applicationContext.xml</param-value>
+	</context-param>
+	<listener>
+		<listener-class>
+			org.springframework.web.context.ContextLoaderListener
+		</listener-class>
+	</listener>
 	<filter>
 	    <filter-name>SecurityFilter</filter-name>
 	    <filter-class>
@@ -16,7 +25,7 @@
 	</filter-mapping>
 	<servlet>
 		<servlet-name>Jersey REST Service</servlet-name>
-		<servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
+		<servlet-class>com.sun.jersey.spi.spring.container.servlet.SpringServlet</servlet-class>
 		<init-param>
 			<param-name>com.sun.jersey.config.property.packages</param-name>
 			<param-value>com.socialchoring.engine.rest</param-value>

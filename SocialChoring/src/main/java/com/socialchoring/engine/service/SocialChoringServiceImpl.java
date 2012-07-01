@@ -10,10 +10,13 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.stereotype.Component;
+
 import com.socialchoring.engine.bean.FriendsForDate;
 import com.socialchoring.engine.bean.Player;
 import com.socialchoring.engine.bean.PlayerChorePlan;
 
+@Component
 public class SocialChoringServiceImpl implements SocialChoringService {
 	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
 	private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/tsce";
