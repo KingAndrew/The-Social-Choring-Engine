@@ -2,7 +2,6 @@ package com.socialchoring.engine.service;
 
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -10,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.apache.commons.dbcp.PoolingDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.socialchoring.engine.bean.FriendsForDate;
@@ -18,10 +19,9 @@ import com.socialchoring.engine.bean.PlayerChorePlan;
 
 @Component
 public class SocialChoringServiceImpl implements SocialChoringService {
-	private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
-	private static final String DB_CONNECTION = "jdbc:mysql://localhost:3306/tsce";
-	private static final String DB_USER = "root";
-	private static final String DB_PASSWORD = "test1234";
+	
+	@Autowired
+	PoolingDataSource pooledDS;
 	static Connection dbConnection = null;
 
 	@Override
@@ -30,7 +30,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		String storeProc = "{call login(?,?,?,?)}";
 
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setString(1, userName);
@@ -76,7 +76,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		String storeProc = "{call create_account(?,?,?,?,?,?)}";
 
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setString(1, userName);
@@ -133,7 +133,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		String storeProc = "{call disable_account(?,?)}";
 
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setLong(1, account_id);
@@ -176,7 +176,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		String storeProc = "{call add_new_player_to_account(?,?,?)}";
 
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setLong(1, account_id);
@@ -220,7 +220,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		String storeProc = "{call get_players_for_account(?)}";
 		List<Player> players = new ArrayList<Player>();
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setLong(1, account_id);
@@ -276,7 +276,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		String storeProc = "{call create_chore_plan_for_player(?,?,?)}";
 
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setLong(1, player_id);
@@ -320,7 +320,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		String storeProc = "{call create_friends_for_date(?,?,?,?)}";
 
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setDate(1, new java.sql.Date(new Date().getTime()));
@@ -365,7 +365,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		String storeProc = "{call get_friends_for_player(?,?)}";
 		List<FriendsForDate> friends = new ArrayList<FriendsForDate>();
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setLong(1, playerId);
@@ -416,7 +416,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		String storeProc = "{call start_chore(?,?,?,?)}";
 
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setLong(1, chore_plan_id);
@@ -461,7 +461,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		String storeProc = "{call stop_chore(?,?,?,?)}";
 
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setLong(1, chore_observed_id);
@@ -506,7 +506,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		String storeProc = "{call calculate_winners(?,?)}";
 
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setDate(1, new java.sql.Date(date_observed.getTime()));
@@ -543,31 +543,13 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		return false;
 	}
 
-	private static Connection getDBConnection() throws SQLException {
-		if (dbConnection == null || dbConnection.isClosed()) {
-			try {
-
-				Class.forName(DB_DRIVER);
-
-			} catch (ClassNotFoundException e) {
-
-				System.out.println(e.getMessage());
-
-			}
-			dbConnection = DriverManager.getConnection(DB_CONNECTION, DB_USER, DB_PASSWORD);
-		}
-
-		return dbConnection;
-
-	}
-
 	@Override
 	public boolean deleteAccount(long acountId) {
 		CallableStatement callableStatement = null;
 		String storeProc = "{call delete_account(?,?)}";
 
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setLong(1, acountId);
@@ -610,7 +592,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		String storeProc = "{call verify_user(?,?)}";
 
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setString(1, username);
@@ -653,7 +635,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		String storeProc = "{call get_plan_for_player_by_date(?,?,?)}";
 		List<PlayerChorePlan> chorePlans = new ArrayList<PlayerChorePlan>();
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setLong(1, playerId);
@@ -707,7 +689,7 @@ public class SocialChoringServiceImpl implements SocialChoringService {
 		CallableStatement callableStatement = null;
 		String storeProc = "{call get_account_for_user(?,?)}";
 		try {
-			dbConnection = getDBConnection();
+			dbConnection = pooledDS.getConnection();
 			callableStatement = dbConnection.prepareCall(storeProc);
 
 			callableStatement.setString(1, username);

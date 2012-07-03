@@ -11,12 +11,17 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import com.socialchoring.engine.service.SocialChoringService;
-import com.socialchoring.engine.service.SocialChoringServiceImpl;
 import com.socialchoring.engine.util.CookieUtil;
 import com.sun.jersey.core.util.Base64;
 
 public class SecurityFilter implements Filter {
+
+	SocialChoringService service;
 
 	/**
 	 * Perform the required authentication checks, and return the verification
@@ -38,7 +43,7 @@ public class SecurityFilter implements Filter {
 		// }
 		// authentication = authentication.substring("OAuth ".length());
 		String username = new String(Base64.base64Decode(authentication));
-		SocialChoringService service = new SocialChoringServiceImpl();
+
 		boolean verified = service.verifyUser(username);
 		if (verified) {
 			System.out.println("USER AUTHENTICATED");
@@ -80,7 +85,9 @@ public class SecurityFilter implements Filter {
 
 	@Override
 	public void init(FilterConfig arg0) throws ServletException {
-		// TODO Auto-generated method stub
+		WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(arg0.getServletContext());
 
+		AutowireCapableBeanFactory autowireCapableBeanFactory = webApplicationContext.getAutowireCapableBeanFactory();
+		service = (SocialChoringService) autowireCapableBeanFactory.getBean("socialChoringServiceImpl");
 	}
 }

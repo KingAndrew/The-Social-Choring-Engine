@@ -8,16 +8,21 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 import twitter4j.Twitter;
 import twitter4j.TwitterException;
 import twitter4j.auth.AccessToken;
 import twitter4j.auth.RequestToken;
 
 import com.socialchoring.engine.service.SocialChoringService;
-import com.socialchoring.engine.service.SocialChoringServiceImpl;
 import com.socialchoring.engine.util.CookieUtil;
 import com.sun.jersey.core.util.Base64;
 
+@Component
 public class CallbackServlet extends HttpServlet {
 	private static final long serialVersionUID = 1657390011452788111L;
 
@@ -40,8 +45,12 @@ public class CallbackServlet extends HttpServlet {
 			// accessToken.getUserId());
 			request.getSession().removeAttribute("requestToken");
 
-			SocialChoringService service = new SocialChoringServiceImpl();
-			boolean success = service.login(accessToken.getScreenName() + "@Twitter", accessToken.getUserId(), new Date());
+			WebApplicationContext webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(this.getServletContext());
+
+			AutowireCapableBeanFactory autowireCapableBeanFactory = webApplicationContext.getAutowireCapableBeanFactory();
+			SocialChoringService socialChoringServiceImpl = (SocialChoringService) autowireCapableBeanFactory.getBean("socialChoringServiceImpl");
+
+			boolean success = socialChoringServiceImpl.login(accessToken.getScreenName() + "@Twitter", accessToken.getUserId(), new Date());
 			if (!success) {
 				response.sendRedirect(request.getContextPath() + "/signin");
 				return;
