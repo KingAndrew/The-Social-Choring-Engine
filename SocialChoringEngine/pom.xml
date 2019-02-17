@@ -29,7 +29,7 @@
 		</plugins>
 	</build>
 	<properties>
-		<org.springframework.version>5.0</org.springframework.version>
+		<org.springframework.version>5.0.7</org.springframework.version>
 	</properties>
 	<dependencies>
 
